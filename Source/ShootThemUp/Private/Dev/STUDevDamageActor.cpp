@@ -27,7 +27,7 @@ void ASTUDevDamageActor::Tick(float DeltaTime)
 	// const FVector Center = FVector(.0, .0, 50.0);
 	 const FVector Center = GetActorLocation();
 	DrawDebugSphere(GetWorld(), Center, Radius, 16, SphereColor);
-	UGameplayStatics::ApplyRadialDamage(GetWorld(), Damage, GetActorLocation(), Radius, nullptr,
+	UGameplayStatics::ApplyRadialDamage(GetWorld(), Damage, GetActorLocation(), Radius, DamageType,
 		{}, this, nullptr, DoFullDamage);
 }
 
