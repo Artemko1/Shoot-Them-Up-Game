@@ -34,7 +34,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UTextRenderComponent* HealthTextComponent;
-	
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* DeathAnimMontage;
+
 	virtual void BeginPlay() override;
 
 public:
@@ -45,16 +48,19 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	bool IsRunning() const;
-	
+
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	float GetMovementDirection() const;
 
 private:
 	bool bWantsToRun = false;
 	bool bIsMovingForward = false;
-	
+
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
 	void OnStartRunning();
 	void OnStopRunning();
+
+	void OnDeath();
+	void OnHealthChanged(float Health) const;
 };

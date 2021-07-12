@@ -1,6 +1,5 @@
 // Shoot Them Up Game. All Rights Reserved.
 
-
 #include "Player/STUBaseCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
@@ -9,11 +8,13 @@
 #include "Components/STUCharacterMovementComponent.h"
 #include "Components/STUHealthComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "GameFramework/Controller.h"
 
-DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All)
+DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All)
 
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer) : Super(
-	ObjectInitializer.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
+	ObjectInitializer.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(
+		ACharacter::CharacterMovementComponentName))
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -36,16 +37,21 @@ void ASTUBaseCharacter::BeginPlay()
 
 	check(HealthComponent);
 	check(HealthTextComponent);
+	check(GetCharacterMovement());
+
+	OnHealthChanged(HealthComponent->GetHealth());
+	HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
+	HealthComponent->OnHealthChanged.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
+}
+
+void ASTUBaseCharacter::OnHealthChanged(const float Health) const
+{
+	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	const auto Health = HealthComponent->GetHealth();
-	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
-
-	// TakeDamage(0.1f, FDamageEvent{}, Controller, this);
 }
 
 
@@ -97,10 +103,24 @@ float ASTUBaseCharacter::GetMovementDirection() const
 	{
 		return 0.0f;
 	}
-	
-	const auto VelocityNormal = GetVelocity().GetSafeNormal();
-	const auto AngleBetween = FMath::Acos(FVector::DotProduct(GetActorForwardVector(), VelocityNormal));
-	const auto CrossProduct = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
-	const auto Degrees = FMath::RadiansToDegrees(AngleBetween); 
+
+	const FVector VelocityNormal = GetVelocity().GetSafeNormal();
+	const float AngleBetween = FMath::Acos(FVector::DotProduct(GetActorForwardVector(), VelocityNormal));
+	const FVector CrossProduct = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
+	const float Degrees = FMath::RadiansToDegrees(AngleBetween);
 	return CrossProduct.IsZero() ? Degrees : Degrees * FMath::Sign(CrossProduct.Z);
+}
+
+void ASTUBaseCharacter::OnDeath()
+{
+	UE_LOG(LogBaseCharacter, Display, TEXT("Player %s is dead."), *GetName())
+
+	PlayAnimMontage(DeathAnimMontage);
+	GetCharacterMovement()->DisableMovement();
+	SetLifeSpan(5.0f);
+
+	if (Controller)
+	{
+		Controller->ChangeState(NAME_Spectating);
+	}
 }
