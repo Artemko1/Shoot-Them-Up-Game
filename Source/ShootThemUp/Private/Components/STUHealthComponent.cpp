@@ -4,7 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All)
+DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All);
 
 USTUHealthComponent::USTUHealthComponent()
 {
@@ -32,8 +32,6 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, const float Dama
 	SetHealth(Health - Damage);
 
 	GetWorld()->GetTimerManager().ClearTimer(AutoHealTimerHandle);
-
-	UE_LOG(LogHealthComponent, Display, TEXT("Damage: %f"), Damage)
 
 	if (IsDead())
 	{
