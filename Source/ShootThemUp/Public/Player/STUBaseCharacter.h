@@ -79,5 +79,5 @@ private:
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& Hit);
 
-	void SpawnWeapon();
+	void SpawnWeapon() const;
 };

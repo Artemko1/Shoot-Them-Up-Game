@@ -22,6 +22,7 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->bUsePawnControlRotation = true;
+	SpringArmComponent->SocketOffset = FVector(0, 100, 20);
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArmComponent);
@@ -30,6 +31,7 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
 
 	HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
 	HealthTextComponent->SetupAttachment(GetRootComponent());
+	HealthTextComponent->SetOwnerNoSee(true);
 }
 
 void ASTUBaseCharacter::BeginPlay()
@@ -143,14 +145,14 @@ void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit)
 	TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
 }
 
-void ASTUBaseCharacter::SpawnWeapon()
+void ASTUBaseCharacter::SpawnWeapon() const
 {
 	if (!GetWorld()) { return; }
 
 	const auto Weapon = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponClass);
 	if (Weapon)
 	{
-		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
+		const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
 		Weapon->AttachToComponent(GetMesh(), AttachmentRules, "WeaponSocket");
 	}
 }
