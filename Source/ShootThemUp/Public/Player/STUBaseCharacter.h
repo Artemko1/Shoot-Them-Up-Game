@@ -12,7 +12,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class USTUHealthComponent;
 class UTextRenderComponent;
-class ASTUBaseWeapon;
+class USTUWeaponComponent;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
@@ -22,6 +22,16 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 public:
 	ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer);
 
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	bool IsRunning() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	float GetMovementDirection() const;
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
@@ -35,6 +45,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UTextRenderComponent* HealthTextComponent;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	USTUWeaponComponent* WeaponComponent;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* DeathAnimMontage;
 
@@ -47,23 +60,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	FVector2D LandedDamage = FVector2D(10.0f, 100.0f);
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	TSubclassOf<ASTUBaseWeapon> WeaponClass;
-
 	virtual void BeginPlay() override;
-
-public:
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UFUNCTION(BlueprintCallable, Category = "Movement")
-	bool IsRunning() const;
-
-	UFUNCTION(BlueprintCallable, Category = "Movement")
-	float GetMovementDirection() const;
-
 private:
 	bool bWantsToRun = false;
 	bool bIsMovingForward = false;
@@ -78,6 +75,4 @@ private:
 
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& Hit);
-
-	void SpawnWeapon() const;
 };
