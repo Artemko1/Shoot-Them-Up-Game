@@ -27,8 +27,6 @@ void ASTUBaseWeapon::BeginPlay()
 
 void ASTUBaseWeapon::Fire()
 {
-	UE_LOG(LogBaseWeapon, Display, TEXT("Fire!"));
-
 	MakeShot();
 }
 
@@ -38,9 +36,9 @@ void ASTUBaseWeapon::MakeShot()
 
 	FVector TraceStart;
 	FVector TraceEnd;
-	
+
 	if (!GetTraceData(TraceStart, TraceEnd)) return;
-	
+
 	FHitResult HitResult;
 	MakeHit(HitResult, TraceStart, TraceEnd);
 
@@ -50,6 +48,8 @@ void ASTUBaseWeapon::MakeShot()
 		              3.f);
 		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
 		UE_LOG(LogBaseWeapon, Display, TEXT("Bone: %s"), *HitResult.BoneName.ToString());
+
+		CauseDamage(HitResult);
 	}
 	else
 	{
@@ -65,7 +65,7 @@ bool ASTUBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
 	if (!bPlayerViewPoint) return false;
 
 	TraceStart = ViewLocation;
-	
+
 	const FVector ShootDirection = ViewRotation.Vector();
 	TraceEnd = ViewLocation + ShootDirection * TraceMaxDistance;
 	return true;
@@ -95,9 +95,17 @@ FVector ASTUBaseWeapon::GetMuzzleWorldLocation() const
 void ASTUBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const
 {
 	if (!GetWorld()) return;
-	
+
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(GetOwner());
 
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
+}
+
+void ASTUBaseWeapon::CauseDamage(const FHitResult& HitResult)
+{
+	AActor* Target = HitResult.GetActor();
+	if (!Target) return;
+	
+	Target->TakeDamage(ShotDamage, FPointDamageEvent(), GetPlayerController(), this);
 }
