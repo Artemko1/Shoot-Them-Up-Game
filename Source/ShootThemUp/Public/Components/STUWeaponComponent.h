@@ -17,7 +17,8 @@ public:
 	USTUWeaponComponent();
 
 	void SpawnWeapon();
-	void Fire();
+	void StartFire();
+	void StopFire();
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	TSubclassOf<ASTUBaseWeapon> WeaponClass;

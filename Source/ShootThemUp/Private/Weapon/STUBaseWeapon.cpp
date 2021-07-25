@@ -1,11 +1,9 @@
 // Shoot Them Up Game. All Rights Reserved.
 
-
 #include "Weapon/STUBaseWeapon.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
-#include "Viewports.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Controller.h"
 
@@ -25,9 +23,15 @@ void ASTUBaseWeapon::BeginPlay()
 	check(WeaponMesh);
 }
 
-void ASTUBaseWeapon::Fire()
+void ASTUBaseWeapon::StartFire()
 {
 	MakeShot();
+	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ASTUBaseWeapon::MakeShot, TimeBetweenShots, true);
+}
+
+void ASTUBaseWeapon::StopFire()
+{
+	GetWorldTimerManager().ClearTimer(ShotTimerHandle);
 }
 
 void ASTUBaseWeapon::MakeShot()
@@ -66,8 +70,9 @@ bool ASTUBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
 
 	TraceStart = ViewLocation;
 
-	const FVector ShootDirection = ViewRotation.Vector();
-	TraceEnd = ViewLocation + ShootDirection * TraceMaxDistance;
+	const float HalfRad = FMath::DegreesToRadians(BulletSpread);
+	const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
+	TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
 	return true;
 }
 
@@ -106,6 +111,6 @@ void ASTUBaseWeapon::CauseDamage(const FHitResult& HitResult)
 {
 	AActor* Target = HitResult.GetActor();
 	if (!Target) return;
-	
+
 	Target->TakeDamage(ShotDamage, FPointDamageEvent(), GetPlayerController(), this);
 }
