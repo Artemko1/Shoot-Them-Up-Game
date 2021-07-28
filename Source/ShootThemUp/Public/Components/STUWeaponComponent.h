@@ -20,7 +20,7 @@ public:
 	void StartFire();
 	void StopFire();
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (BlueprintBaseOnly))
 	TSubclassOf<ASTUBaseWeapon> WeaponClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
