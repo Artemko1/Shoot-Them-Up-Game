@@ -35,7 +35,7 @@ void ASTURifleWeapon::MakeShot()
 					3.f);
 		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
 
-		CauseDamage(HitResult);
+		MakeDamage(HitResult);
 	}
 	else
 	{
@@ -56,4 +56,12 @@ bool ASTURifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
 	const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
 	TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
 	return true;
+}
+
+void ASTURifleWeapon::MakeDamage(const FHitResult& HitResult)
+{
+	AActor* Target = HitResult.GetActor();
+	if (!Target) return;
+
+	Target->TakeDamage(DamageAmount, FPointDamageEvent(), GetPlayerController(), this);
 }

@@ -78,11 +78,3 @@ void ASTUBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, c
 
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
 }
-
-void ASTUBaseWeapon::CauseDamage(const FHitResult& HitResult)
-{
-	AActor* Target = HitResult.GetActor();
-	if (!Target) return;
-
-	Target->TakeDamage(ShotDamage, FPointDamageEvent(), GetPlayerController(), this);
-}
