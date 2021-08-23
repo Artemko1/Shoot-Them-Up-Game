@@ -65,7 +65,6 @@ void ASTUBaseCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-// Called to bind functionality to input
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -147,11 +146,9 @@ void ASTUBaseCharacter::OnDeath()
 void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit)
 {
 	const auto FallVelocityZ = -GetVelocity().Z;
-	UE_LOG(LogBaseCharacter, Display, TEXT("On landed: %f"), FallVelocityZ);
 
 	if (FallVelocityZ < LandedDamageVelocity.X) { return; }
 
 	const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
-	UE_LOG(LogBaseCharacter, Display, TEXT("FinalDamage: %f"), FinalDamage);
 	TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
 }
