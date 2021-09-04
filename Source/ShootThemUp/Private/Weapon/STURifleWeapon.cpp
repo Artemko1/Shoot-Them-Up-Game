@@ -24,7 +24,7 @@ void ASTURifleWeapon::MakeShot()
 		StopFire();
 		return;
 	}
-
+	
 	FVector TraceStart;
 	FVector TraceEnd;
 
@@ -40,7 +40,7 @@ void ASTURifleWeapon::MakeShot()
 	if (HitResult.bBlockingHit)
 	{
 		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0,
-					3.f);
+		              3.f);
 		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
 
 		MakeDamage(HitResult);
