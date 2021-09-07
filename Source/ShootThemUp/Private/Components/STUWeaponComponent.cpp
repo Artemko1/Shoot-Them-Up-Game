@@ -46,6 +46,8 @@ void USTUWeaponComponent::SpawnWeapons()
 	{
 		const auto Weapon = GetWorld()->SpawnActor<ASTUBaseWeapon>(SingleWeaponData.WeaponClass);
 		if (!Weapon) continue;;
+
+		Weapon->OnClipEmpty.AddUObject(this, &USTUWeaponComponent::OnEmptyClip);
 		Weapon->SetOwner(Character);
 		Weapons.Add(Weapon);
 
@@ -115,14 +117,6 @@ void USTUWeaponComponent::NextWeapon()
 	EquipWeapon(CurrentWeaponIndex);
 }
 
-// ReSharper disable once CppMemberFunctionMayBeConst
-void USTUWeaponComponent::Reload()
-{
-	if (!CanReload()) return;
-	ReloadAnimInProgress = true;
-	PlayAnimMontage(CurrentReloadAnimMontage);
-}
-
 void USTUWeaponComponent::PlayAnimMontage(UAnimMontage* Animation) const
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
@@ -175,5 +169,25 @@ bool USTUWeaponComponent::CanEquip() const
 
 bool USTUWeaponComponent::CanReload() const
 {
-	return CurrentWeapon && !EquipAnimInProgress && !ReloadAnimInProgress;
+	return CurrentWeapon && !EquipAnimInProgress && !ReloadAnimInProgress && CurrentWeapon->CanReload();
+}
+
+// ReSharper disable once CppMemberFunctionMayBeConst
+void USTUWeaponComponent::Reload()
+{
+	ChangeClip();
+}
+
+void USTUWeaponComponent::OnEmptyClip()
+{
+	ChangeClip();
+}
+
+void USTUWeaponComponent::ChangeClip()
+{
+	if (!CanReload()) return;
+	CurrentWeapon->StopFire();
+	CurrentWeapon->ChangeClip();
+	ReloadAnimInProgress = true;
+	PlayAnimMontage(CurrentReloadAnimMontage);
 }

@@ -97,4 +97,7 @@ private:
 	bool CanFire() const;
 	bool CanEquip() const;
 	bool CanReload() const;
+
+	void OnEmptyClip();
+	void ChangeClip();
 };
