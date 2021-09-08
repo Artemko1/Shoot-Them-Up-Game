@@ -3,22 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "STUCoreTypes.h"
 #include "Components/ActorComponent.h"
 #include "STUWeaponComponent.generated.h"
 
 class ASTUBaseWeapon;
-
-USTRUCT(BlueprintType)
-struct FWeaponData
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (BlueprintBaseOnly))
-	TSubclassOf<ASTUBaseWeapon> WeaponClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (BlueprintBaseOnly))
-	UAnimMontage* ReloadAnimMontage;
-};
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
@@ -72,24 +61,6 @@ private:
 	void PlayAnimMontage(UAnimMontage* Animation) const;
 
 	void InitAnimations();
-
-	template <typename T>
-	T* FindNotifyByClass(UAnimSequenceBase* Animation) const
-	{
-		if (!Animation) return nullptr;
-
-		const auto NotifyEvents = Animation->Notifies;
-		for (const auto NotifyEvent : NotifyEvents)
-		{
-			const auto AnimNotify = Cast<T>(NotifyEvent.Notify);
-			if (AnimNotify)
-			{
-				return AnimNotify;
-			}
-		}
-
-		return nullptr;
-	}
 
 	void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
 	void OnReloadFinished(USkeletalMeshComponent* MeshComponent);
