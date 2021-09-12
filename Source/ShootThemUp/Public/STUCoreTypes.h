@@ -33,11 +33,23 @@ struct FWeaponData
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (BlueprintBaseOnly))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<ASTUBaseWeapon> WeaponClass;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (BlueprintBaseOnly))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	UAnimMontage* ReloadAnimMontage;
+};
+
+USTRUCT(BlueprintType)
+struct FWeaponUIData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	UTexture2D* MainIcon;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	UTexture2D* CrossHairIcon;
 };
 
 // Weapon end

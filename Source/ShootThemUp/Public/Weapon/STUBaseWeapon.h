@@ -18,12 +18,15 @@ public:
 	ASTUBaseWeapon();
 
 	FOnClipEmptySignature OnClipEmpty;
-	
+
 	virtual void StartFire();
 	virtual void StopFire();
-	
+
 	void ChangeClip();
 	bool CanReload() const;
+
+	FWeaponUIData GetUIData() const { return UIData; }
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;
@@ -31,11 +34,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	FName MuzzleSocketName = "MuzzleSocket";
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	float TraceMaxDistance = 1500.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	FAmmoData DefaultAmmo{15, 10, false};
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	FWeaponUIData UIData;
 
 	virtual void BeginPlay() override;
 
