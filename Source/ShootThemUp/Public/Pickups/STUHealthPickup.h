@@ -13,5 +13,6 @@ UCLASS()
 class SHOOTTHEMUP_API ASTUHealthPickup : public ASTUBasePickup
 {
 	GENERATED_BODY()
-	
+protected:
+	virtual bool GivePickupTo(APawn* PlayerPawn) override;
 };
