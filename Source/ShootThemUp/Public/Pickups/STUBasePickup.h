@@ -27,10 +27,9 @@ protected:
 
 	virtual void BeginPlay() override;
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-
-	virtual bool GivePickupTo(APawn* PlayerPawn);
 	
 private:
+	virtual bool GivePickupTo(APawn* PlayerPawn);
 	void PickupWasTaken();
 	void Respawn();
 };

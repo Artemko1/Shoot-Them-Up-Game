@@ -5,7 +5,6 @@
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/Controller.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All)
 
@@ -24,7 +23,7 @@ void ASTUBaseWeapon::BeginPlay()
 	check(WeaponMesh);
 	checkf(DefaultAmmo.Bullets > 0, TEXT("Bullets count must be more than zero"))
 	checkf(DefaultAmmo.Clips > 0, TEXT("Clips count must be more than zero"))
-	
+
 	CurrentAmmo = DefaultAmmo;
 }
 
@@ -91,13 +90,13 @@ void ASTUBaseWeapon::DecreaseAmmo()
 		UE_LOG(LogBaseWeapon, Warning, TEXT("Clip is already empty"));
 		return;
 	}
-	
+
 	CurrentAmmo.Bullets--;
 
 	if (IsClipEmpty() && !IsAmmoEmpty())
 	{
 		StopFire();
-		OnClipEmpty.Broadcast();
+		OnClipEmpty.Broadcast(this);
 	}
 }
 
@@ -111,6 +110,7 @@ bool ASTUBaseWeapon::IsClipEmpty() const
 	return CurrentAmmo.Bullets == 0;
 }
 
+
 void ASTUBaseWeapon::ChangeClip()
 {
 	if (!CurrentAmmo.Infinite)
@@ -120,10 +120,10 @@ void ASTUBaseWeapon::ChangeClip()
 			UE_LOG(LogBaseWeapon, Warning, TEXT("No more clips"));
 			return;
 		}
-		
+
 		CurrentAmmo.Clips--;
 	}
-	
+
 	CurrentAmmo.Bullets = DefaultAmmo.Bullets;
 	UE_LOG(LogBaseWeapon, Display, TEXT("---- CHANGE CLIP ----"));
 }
@@ -131,6 +131,44 @@ void ASTUBaseWeapon::ChangeClip()
 bool ASTUBaseWeapon::CanReload() const
 {
 	return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0;
+}
+
+bool ASTUBaseWeapon::TryToAddAmmo(const int32 ClipsAmount)
+{
+	if (CurrentAmmo.Infinite || IsAmmoFull() || ClipsAmount <= 0) return false;
+
+	if (IsAmmoEmpty())
+	{
+		UE_LOG(LogBaseWeapon, Display, TEXT("Ammo was empty"));
+		CurrentAmmo.Clips = FMath::Clamp(ClipsAmount, 0, DefaultAmmo.Clips + 1);
+		OnClipEmpty.Broadcast(this);
+	}
+	else if (CurrentAmmo.Clips < DefaultAmmo.Clips)
+	{
+		const auto NextClipsAmount = CurrentAmmo.Clips + ClipsAmount;
+		if (DefaultAmmo.Clips >= NextClipsAmount)
+		{
+			UE_LOG(LogBaseWeapon, Display, TEXT("Clips were added"));
+			CurrentAmmo.Clips = NextClipsAmount;
+		}
+		else
+		{
+			UE_LOG(LogBaseWeapon, Display, TEXT("Ammo is full now"));
+			CurrentAmmo.Clips = DefaultAmmo.Clips;
+			CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+		}
+	}
+	else
+	{
+		UE_LOG(LogBaseWeapon, Display, TEXT("Bullets were added"));
+		CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+	}
+	return true;
+}
+
+bool ASTUBaseWeapon::IsAmmoFull() const
+{
+	return CurrentAmmo.Clips == DefaultAmmo.Clips && CurrentAmmo.Bullets == DefaultAmmo.Bullets;
 }
 
 void ASTUBaseWeapon::LogAmmo()
