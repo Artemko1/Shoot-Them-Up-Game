@@ -21,8 +21,14 @@ public:
 	UFUNCTION(BlueprintGetter, Category = "Health")
 	bool IsDead() const { return FMath::IsNearlyZero(Health); }
 
+	UFUNCTION(BlueprintGetter, Category = "Health")
+	bool IsFullHealth() const { return FMath::IsNearlyEqual(Health, MaxHealth); }
+
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetHealthPercent() const { return Health / MaxHealth; }
+	
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	bool TryAddHealth(float Amount);
 
 	float GetHealth() const { return Health; }
 

@@ -16,7 +16,7 @@ void USTUHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	check(MaxHealth > 0);
-	
+
 	SetHealth(MaxHealth);
 
 	AActor* ComponentOwner = GetOwner();
@@ -24,6 +24,18 @@ void USTUHealthComponent::BeginPlay()
 	{
 		ComponentOwner->OnTakeAnyDamage.AddDynamic(this, &USTUHealthComponent::OnTakeAnyDamage);
 	}
+}
+
+bool USTUHealthComponent::TryAddHealth(const float Amount)
+{
+	if (Amount <= 0 || IsDead() || IsFullHealth())
+	{
+		return false;
+	}
+
+	SetHealth(Health + Amount);
+	UE_LOG(LogHealthComponent, Display, TEXT("Health was added"));
+	return true;
 }
 
 void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, const float Damage, const UDamageType* DamageType,
@@ -49,7 +61,7 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, const float Dama
 void USTUHealthComponent::AutoHealTick()
 {
 	SetHealth(Health + HealModifier);
-	if (FMath::IsNearlyEqual(Health, MaxHealth) && GetWorld())
+	if (IsFullHealth() && GetWorld())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(AutoHealTimerHandle);
 	}
