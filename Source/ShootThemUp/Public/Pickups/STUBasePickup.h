@@ -29,7 +29,10 @@ protected:
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Pickup", meta = (ClampMin = "-360", ClampMax = "360"))
+	float RotationYaw = 135.f;
+	
 	virtual bool GivePickupTo(APawn* PlayerPawn);
 	void PickupWasTaken();
-	void Respawn();
+	void Respawn() const;
 };
