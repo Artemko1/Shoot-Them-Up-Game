@@ -4,7 +4,20 @@
 #include "Weapon/STURifleWeapon.h"
 
 #include "DrawDebugHelpers.h"
+#include "STUWeaponFXComponent.h"
 
+
+ASTURifleWeapon::ASTURifleWeapon()
+{
+	WeaponFXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>("WeaponFXComponent");
+}
+
+void ASTURifleWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+
+	check(WeaponFXComponent);
+}
 
 void ASTURifleWeapon::StartFire()
 {
@@ -24,7 +37,7 @@ void ASTURifleWeapon::MakeShot()
 		StopFire();
 		return;
 	}
-	
+
 	FVector TraceStart;
 	FVector TraceEnd;
 
@@ -39,11 +52,12 @@ void ASTURifleWeapon::MakeShot()
 
 	if (HitResult.bBlockingHit)
 	{
-		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0,
-		              3.f);
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
-
 		MakeDamage(HitResult);
+		
+		// DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
+		// DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
+
+		WeaponFXComponent->PlayImpactFX(HitResult);
 	}
 	else
 	{
@@ -60,7 +74,7 @@ bool ASTURifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
 	const bool bPlayerViewPoint = GetPlayerViewPoint(ViewLocation, ViewRotation);
 	if (!bPlayerViewPoint) return false;
 
-	TraceStart = ViewLocation;
+	TraceStart = ViewLocation + ViewRotation.Vector() * 350; // Добавляем примерное расстояние от камеры до персонажа
 
 	const float HalfRad = FMath::DegreesToRadians(BulletSpread);
 	const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
