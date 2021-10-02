@@ -9,7 +9,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogHealthPickup, All, All);
 
 bool ASTUHealthPickup::GivePickupTo(APawn* PlayerPawn)
 {
-	const auto HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(PlayerPawn);
+	const auto HealthComponent = FSTUUtils::GetSTUPlayerComponent<USTUHealthComponent>(PlayerPawn);
 	if (!HealthComponent) return false;
 
 	return HealthComponent->TryAddHealth(HealthAmount);

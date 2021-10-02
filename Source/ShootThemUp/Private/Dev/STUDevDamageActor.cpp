@@ -3,6 +3,7 @@
 
 #include "Dev/STUDevDamageActor.h"
 #include "DrawDebugHelpers.h"
+#include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 
 ASTUDevDamageActor::ASTUDevDamageActor()

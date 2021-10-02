@@ -3,10 +3,12 @@
 #include "Components/STUWeaponComponent.h"
 
 #include "AnimUtils.h"
+#include "Animation/AnimMontage.h"
 #include "Weapon/STUBaseWeapon.h"
 #include "GameFramework/Character.h"
 #include "Animations/STUEquipFinishedAnimNotify.h"
 #include "Animations/STUReloadFinishedAnimNotify.h"
+#include "Components/SkeletalMeshComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogWeaponComponent, All, All);
 
@@ -132,7 +134,7 @@ void USTUWeaponComponent::PlayAnimMontage(UAnimMontage* Animation) const
 
 void USTUWeaponComponent::InitAnimations()
 {
-	const auto EquipFinishedNotify = AnimUtils::FindNotifyByClass<USTUEquipFinishedAnimNotify>(EquipAnimMontage);
+	const auto EquipFinishedNotify = FAnimUtils::FindNotifyByClass<USTUEquipFinishedAnimNotify>(EquipAnimMontage);
 	if (EquipFinishedNotify)
 	{
 		EquipFinishedNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnEquipFinished);
@@ -145,7 +147,7 @@ void USTUWeaponComponent::InitAnimations()
 
 	for (const auto SingleWeaponData : WeaponData)
 	{
-		const auto ReloadFinishedNotify = AnimUtils::FindNotifyByClass<USTUReloadFinishedAnimNotify>(
+		const auto ReloadFinishedNotify = FAnimUtils::FindNotifyByClass<USTUReloadFinishedAnimNotify>(
 			SingleWeaponData.ReloadAnimMontage);
 		if (!ReloadFinishedNotify)
 		{

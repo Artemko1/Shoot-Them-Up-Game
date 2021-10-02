@@ -1,6 +1,9 @@
 ﻿#pragma once
 
-class STUUtils
+#include "GameFramework/Pawn.h"
+#include "GameFramework/Controller.h"
+
+class FSTUUtils
 {
 public:
 	template<typename T>

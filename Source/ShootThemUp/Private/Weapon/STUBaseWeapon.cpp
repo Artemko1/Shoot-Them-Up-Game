@@ -5,6 +5,7 @@
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/PlayerController.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All)
 
@@ -79,6 +80,7 @@ void ASTUBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, c
 
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(GetOwner());
+	CollisionParams.bReturnPhysicalMaterial = true;
 
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
 }

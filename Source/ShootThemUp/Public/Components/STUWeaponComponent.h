@@ -8,6 +8,7 @@
 #include "Components/ActorComponent.h"
 #include "STUWeaponComponent.generated.h"
 
+class UAnimMontage;
 class ASTUBaseWeapon;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))

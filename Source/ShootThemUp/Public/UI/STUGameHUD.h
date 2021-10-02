@@ -6,6 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "STUGameHUD.generated.h"
 
+class UUserWidget;
 UCLASS()
 class SHOOTTHEMUP_API ASTUGameHUD : public AHUD
 {

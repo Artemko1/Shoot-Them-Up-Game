@@ -1,8 +1,11 @@
 ﻿#pragma once
 
+#include "Templates/SubclassOf.h"
 #include "STUCoreTypes.generated.h"
 // Weapon start
 
+class UTexture2D;
+class UAnimMontage;
 class ASTUBaseWeapon;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnClipEmptySignature, ASTUBaseWeapon*);

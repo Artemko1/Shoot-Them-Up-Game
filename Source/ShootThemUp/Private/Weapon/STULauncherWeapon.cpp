@@ -2,6 +2,8 @@
 
 
 #include "Weapon/STULauncherWeapon.h"
+
+#include "Engine/World.h"
 #include "Weapon/STUProjectile.h"
 
 void ASTULauncherWeapon::StartFire()

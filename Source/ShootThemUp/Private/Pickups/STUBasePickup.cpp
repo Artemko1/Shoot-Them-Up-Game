@@ -1,6 +1,7 @@
 // Shoot Them Up Game. All Rights Reserved.
 
 #include "Pickups/STUBasePickup.h"
+#include "TimerManager.h"
 #include "Components/SphereComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBasePickup, All, All);

@@ -11,10 +11,10 @@ DEFINE_LOG_CATEGORY_STATIC(LogAmmoPickup, All, All);
 
 bool ASTUAmmoPickup::GivePickupTo(APawn* PlayerPawn)
 {
-	const auto HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(PlayerPawn);
+	const auto HealthComponent = FSTUUtils::GetSTUPlayerComponent<USTUHealthComponent>(PlayerPawn);
 	if (!HealthComponent || HealthComponent->IsDead()) return false;
 	
-	const auto WeaponComponent = STUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(PlayerPawn);
+	const auto WeaponComponent = FSTUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(PlayerPawn);
 	if (!WeaponComponent) return false;
 	
 	return WeaponComponent->TryAddAmmo(WeaponType, ClipsAmount);

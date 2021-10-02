@@ -5,6 +5,8 @@
 
 #include "DrawDebugHelpers.h"
 #include "STUWeaponFXComponent.h"
+#include "TimerManager.h"
+#include "GameFramework/PlayerController.h"
 
 
 ASTURifleWeapon::ASTURifleWeapon()

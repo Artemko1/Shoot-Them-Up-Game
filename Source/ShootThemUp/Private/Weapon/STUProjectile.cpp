@@ -6,6 +6,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "DrawDebugHelpers.h"
 #include "STUWeaponFXComponent.h"
+#include "GameFramework/DamageType.h"
 #include "Kismet/GameplayStatics.h"
 
 ASTUProjectile::ASTUProjectile()
@@ -16,6 +17,7 @@ ASTUProjectile::ASTUProjectile()
 	CollisionComponent->SetSphereRadius(5.f);
 	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Block);
+	CollisionComponent->bReturnMaterialOnMove = true;
 	SetRootComponent(CollisionComponent);
 
 	MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComponent");

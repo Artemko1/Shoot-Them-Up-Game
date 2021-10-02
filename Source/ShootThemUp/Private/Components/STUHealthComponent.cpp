@@ -3,6 +3,7 @@
 #include "Components/STUHealthComponent.h"
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"
+#include "Engine/World.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All);
 

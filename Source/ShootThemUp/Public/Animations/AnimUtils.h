@@ -1,6 +1,9 @@
 ﻿#pragma once
+#include "Animation/AnimSequenceBase.h"
 
-class AnimUtils
+class UAnimSequenceBase;
+
+class FAnimUtils
 {
 public:
 	template <typename T>
