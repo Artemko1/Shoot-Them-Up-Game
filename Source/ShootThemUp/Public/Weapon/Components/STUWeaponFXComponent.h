@@ -3,26 +3,26 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "STUCoreTypes.h"
 #include "Components/ActorComponent.h"
 #include "STUWeaponFXComponent.generated.h"
 
 class UNiagaraSystem;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SHOOTTHEMUP_API USTUWeaponFXComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	USTUWeaponFXComponent();
 
 	void PlayImpactFX(const FHitResult& Hit);
 
-	protected:
+protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-	UNiagaraSystem* DefaultEffect;
-	
+	FImpactData DefaultImpactData;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-	TMap<UPhysicalMaterial*, UNiagaraSystem*> EffectsMap;
-	
+	TMap<UPhysicalMaterial*, FImpactData> ImpactDataMap;
 };
