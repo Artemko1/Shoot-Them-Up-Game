@@ -68,5 +68,5 @@ private:
 	void AutoHealTick();
 	void SetHealth(float NewHealth);
 
-	void PlayCameraShake();
+	void PlayCameraShake() const;
 };
