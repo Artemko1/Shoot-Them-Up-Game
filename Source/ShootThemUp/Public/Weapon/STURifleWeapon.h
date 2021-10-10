@@ -34,8 +34,14 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void MakeShot() override;
 	virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
-	void MakeDamage(const FHitResult& HitResult);
 
 private:
 	FTimerHandle ShotTimerHandle;
+
+	UPROPERTY()
+	UNiagaraComponent* MuzzleFXComponent;
+	
+	void MakeDamage(const FHitResult& HitResult);
+	void InitMuzzleFX();
+	void SetMuzzleFXVisibility(bool IsVisible) const;
 };

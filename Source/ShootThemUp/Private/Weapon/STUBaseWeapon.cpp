@@ -4,6 +4,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "NiagaraFunctionLibrary.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/PlayerController.h"
 
@@ -178,4 +179,10 @@ void ASTUBaseWeapon::LogAmmo()
 	FString AmmoInfo = "Ammo: " + FString::FromInt(CurrentAmmo.Bullets) + " / ";
 	AmmoInfo += CurrentAmmo.Infinite ? "Infinite" : FString::FromInt(CurrentAmmo.Clips);
 	UE_LOG(LogBaseWeapon, Display, TEXT("%s"), *AmmoInfo);
+}
+
+UNiagaraComponent* ASTUBaseWeapon::SpawnMuzzleFX() const
+{
+	return UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleFX, WeaponMesh, MuzzleSocketName, FVector::ZeroVector,
+	                                                    FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
 }

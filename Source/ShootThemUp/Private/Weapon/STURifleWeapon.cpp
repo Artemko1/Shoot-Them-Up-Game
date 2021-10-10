@@ -4,6 +4,7 @@
 #include "Weapon/STURifleWeapon.h"
 
 #include "DrawDebugHelpers.h"
+#include "NiagaraComponent.h"
 #include "STUWeaponFXComponent.h"
 #include "TimerManager.h"
 #include "GameFramework/PlayerController.h"
@@ -23,6 +24,7 @@ void ASTURifleWeapon::BeginPlay()
 
 void ASTURifleWeapon::StartFire()
 {
+	InitMuzzleFX();
 	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ASTURifleWeapon::MakeShot, TimeBetweenShots, true);
 	MakeShot();
 }
@@ -30,6 +32,7 @@ void ASTURifleWeapon::StartFire()
 void ASTURifleWeapon::StopFire()
 {
 	GetWorldTimerManager().ClearTimer(ShotTimerHandle);
+	SetMuzzleFXVisibility(false);
 }
 
 void ASTURifleWeapon::MakeShot()
@@ -55,7 +58,7 @@ void ASTURifleWeapon::MakeShot()
 	if (HitResult.bBlockingHit)
 	{
 		MakeDamage(HitResult);
-		
+
 		// DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
 		// DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
 
@@ -90,4 +93,25 @@ void ASTURifleWeapon::MakeDamage(const FHitResult& HitResult)
 	if (!Target) return;
 
 	Target->TakeDamage(DamageAmount, FPointDamageEvent(), GetPlayerController(), this);
+}
+
+void ASTURifleWeapon::InitMuzzleFX()
+{
+	if (!MuzzleFXComponent)
+	{
+		MuzzleFXComponent = SpawnMuzzleFX();
+	}
+	
+	SetMuzzleFXVisibility(true);
+}
+
+void ASTURifleWeapon::SetMuzzleFXVisibility(const bool IsVisible) const
+{
+	if (!MuzzleFXComponent)
+	{
+		return;
+	}
+
+	MuzzleFXComponent->SetPaused(!IsVisible);
+	MuzzleFXComponent->SetVisibility(IsVisible);
 }

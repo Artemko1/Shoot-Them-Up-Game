@@ -37,4 +37,6 @@ void ASTULauncherWeapon::MakeShot()
 	}
 	
 	DecreaseAmmo();
+	// ReSharper disable once CppExpressionWithoutSideEffects
+	SpawnMuzzleFX();
 }
