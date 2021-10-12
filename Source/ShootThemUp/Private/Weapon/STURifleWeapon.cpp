@@ -5,10 +5,12 @@
 
 #include "DrawDebugHelpers.h"
 #include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "STUWeaponFXComponent.h"
 #include "TimerManager.h"
 #include "GameFramework/PlayerController.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All)
 
 ASTURifleWeapon::ASTURifleWeapon()
 {
@@ -55,8 +57,10 @@ void ASTURifleWeapon::MakeShot()
 	FHitResult HitResult;
 	MakeHit(HitResult, TraceStart, TraceEnd);
 
+	FVector TraceFXEnd = TraceEnd;
 	if (HitResult.bBlockingHit)
 	{
+		TraceFXEnd = HitResult.ImpactPoint;
 		MakeDamage(HitResult);
 
 		// DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
@@ -64,11 +68,12 @@ void ASTURifleWeapon::MakeShot()
 
 		WeaponFXComponent->PlayImpactFX(HitResult);
 	}
-	else
-	{
-		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd, FColor::Red, false, 3.f, 0, 3.f);
-	}
+	// else
+	// {
+	// 	DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd, FColor::Red, false, 3.f, 0, 3.f);
+	// }
 
+	SpawnTraceFX(GetMuzzleWorldLocation(), TraceFXEnd);
 	DecreaseAmmo();
 }
 
@@ -101,7 +106,7 @@ void ASTURifleWeapon::InitMuzzleFX()
 	{
 		MuzzleFXComponent = SpawnMuzzleFX();
 	}
-	
+
 	SetMuzzleFXVisibility(true);
 }
 
@@ -114,4 +119,17 @@ void ASTURifleWeapon::SetMuzzleFXVisibility(const bool IsVisible) const
 
 	MuzzleFXComponent->SetPaused(!IsVisible);
 	MuzzleFXComponent->SetVisibility(IsVisible);
+}
+
+void ASTURifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd)
+{
+	const auto TraceFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceFX, TraceStart);
+	if (TraceFXComponent)
+	{
+		TraceFXComponent->SetNiagaraVariableVec3(TraceTargetName, TraceEnd);
+	}
+	else
+	{
+		UE_LOG(LogRifleWeapon, Warning, TEXT("TraceFX niagara system is null"));
+	}
 }

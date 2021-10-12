@@ -183,6 +183,11 @@ void ASTUBaseWeapon::LogAmmo()
 
 UNiagaraComponent* ASTUBaseWeapon::SpawnMuzzleFX() const
 {
-	return UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleFX, WeaponMesh, MuzzleSocketName, FVector::ZeroVector,
-	                                                    FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
+	return UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleFX,
+	                                                    WeaponMesh,
+	                                                    MuzzleSocketName,
+	                                                    FVector::ZeroVector,
+	                                                    FRotator::ZeroRotator,
+	                                                    EAttachLocation::SnapToTarget,
+	                                                    true);
 }

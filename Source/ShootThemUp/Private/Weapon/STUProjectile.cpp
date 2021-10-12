@@ -61,7 +61,8 @@ void ASTUProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* 
 
 	DrawDebugSphere(GetWorld(), GetActorLocation(), DamageRadius, 24, FColor::Red, false, 3.5f);
 	WeaponFXComponent->PlayImpactFX(Hit);
-	Destroy();
+	
+	SetAutoDestroyWhenFinished(true);
 }
 
 AController* ASTUProjectile::GetController() const
