@@ -4,7 +4,6 @@
 #include "Weapon/STUProjectile.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "DrawDebugHelpers.h"
 #include "STUWeaponFXComponent.h"
 #include "GameFramework/DamageType.h"
 #include "Kismet/GameplayStatics.h"
@@ -59,9 +58,7 @@ void ASTUProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* 
 	                                    GetController(),
 	                                    DoFullDamage);
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), DamageRadius, 24, FColor::Red, false, 3.5f);
 	WeaponFXComponent->PlayImpactFX(Hit);
-	
 	SetAutoDestroyWhenFinished(true);
 }
 

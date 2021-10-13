@@ -6,6 +6,11 @@
 #include "Engine/World.h"
 #include "Weapon/STUProjectile.h"
 
+ASTULauncherWeapon::ASTULauncherWeapon()
+{
+	DefaultAmmo = {1, 5, false};
+}
+
 void ASTULauncherWeapon::StartFire()
 {
 	MakeShot();

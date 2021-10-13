@@ -11,7 +11,7 @@ class UNiagaraComponent;
 class UNiagaraSystem;
 class USkeletalMeshComponent;
 
-UCLASS()
+UCLASS(Abstract)
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 {
 	GENERATED_BODY()
@@ -39,10 +39,10 @@ protected:
 	FName MuzzleSocketName = "MuzzleSocket";
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-	float TraceMaxDistance = 1500.f;
+	float TraceMaxDistance = 3000.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-	FAmmoData DefaultAmmo{15, 10, false};
+	FAmmoData DefaultAmmo = {20, 10, false};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	FWeaponUIData UIData;

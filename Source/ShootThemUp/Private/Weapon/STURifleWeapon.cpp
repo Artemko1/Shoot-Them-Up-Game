@@ -2,8 +2,6 @@
 
 
 #include "Weapon/STURifleWeapon.h"
-
-#include "DrawDebugHelpers.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "STUWeaponFXComponent.h"
@@ -15,6 +13,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All)
 ASTURifleWeapon::ASTURifleWeapon()
 {
 	WeaponFXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>("WeaponFXComponent");
+	DefaultAmmo = {25, 10, true};
 }
 
 void ASTURifleWeapon::BeginPlay()
@@ -63,15 +62,8 @@ void ASTURifleWeapon::MakeShot()
 		TraceFXEnd = HitResult.ImpactPoint;
 		MakeDamage(HitResult);
 
-		// DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
-		// DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
-
 		WeaponFXComponent->PlayImpactFX(HitResult);
 	}
-	// else
-	// {
-	// 	DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd, FColor::Red, false, 3.f, 0, 3.f);
-	// }
 
 	SpawnTraceFX(GetMuzzleWorldLocation(), TraceFXEnd);
 	DecreaseAmmo();
