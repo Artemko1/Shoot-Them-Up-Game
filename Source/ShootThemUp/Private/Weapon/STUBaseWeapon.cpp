@@ -24,7 +24,7 @@ void ASTUBaseWeapon::BeginPlay()
 
 	check(WeaponMesh);
 	checkf(DefaultAmmo.Bullets > 0, TEXT("Bullets count must be more than zero"))
-	checkf(DefaultAmmo.Clips > 0, TEXT("Clips count must be more than zero"))
+	checkf(DefaultAmmo.SpareBullets > 0, TEXT("SpareBullets count must be more than zero"))
 
 	CurrentAmmo = DefaultAmmo;
 }
@@ -105,7 +105,7 @@ void ASTUBaseWeapon::DecreaseAmmo()
 
 bool ASTUBaseWeapon::IsAmmoEmpty() const
 {
-	return !CurrentAmmo.Infinite && CurrentAmmo.Clips == 0 && IsClipEmpty();
+	return !CurrentAmmo.Infinite && CurrentAmmo.SpareBullets == 0 && IsClipEmpty();
 }
 
 bool ASTUBaseWeapon::IsClipEmpty() const
@@ -116,68 +116,78 @@ bool ASTUBaseWeapon::IsClipEmpty() const
 
 void ASTUBaseWeapon::ChangeClip()
 {
-	if (!CurrentAmmo.Infinite)
+	if (CurrentAmmo.Infinite)
 	{
-		if (CurrentAmmo.Clips == 0)
+		CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+	}
+	else
+	{
+		if (CurrentAmmo.SpareBullets == 0)
 		{
-			UE_LOG(LogBaseWeapon, Warning, TEXT("No more clips"));
+			UE_LOG(LogBaseWeapon, Warning, TEXT("No more spare bullets"));
 			return;
 		}
 
-		CurrentAmmo.Clips--;
+		const auto NeededAmmo = DefaultAmmo.Bullets - CurrentAmmo.Bullets;
+		if (NeededAmmo <= 0)
+		{
+			constexpr auto LogMessage =
+				"Reload is not needed because weapon has more bullets in current clip than it would get after reloadReload is not needed because weapon has more bullets in current clip than it would get after reloadReload is not needed because weapon has more bullets in current clip than it would get after reload";
+			UE_LOG(LogBaseWeapon, Warning, TEXT("%s"), LogMessage);
+			return;
+		}
+
+		const auto AmmoToBeRefilled = FMath::Min(NeededAmmo, CurrentAmmo.SpareBullets);
+		checkf(AmmoToBeRefilled > 0, TEXT("Must refill positive amount of ammo!"))
+
+		CurrentAmmo.SpareBullets -= AmmoToBeRefilled;
+		CurrentAmmo.Bullets += AmmoToBeRefilled;
 	}
 
-	CurrentAmmo.Bullets = DefaultAmmo.Bullets;
 	UE_LOG(LogBaseWeapon, Display, TEXT("---- CHANGE CLIP ----"));
 }
 
 bool ASTUBaseWeapon::CanReload() const
 {
-	return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0;
+	return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.SpareBullets > 0;
 }
 
-bool ASTUBaseWeapon::TryToAddAmmo(const int32 ClipsAmount)
-{
-	if (CurrentAmmo.Infinite || IsAmmoFull() || ClipsAmount <= 0) return false;
 
-	if (IsAmmoEmpty())
+bool ASTUBaseWeapon::TryToAddAmmo(const int32 BulletAmount)
+{
+	if (IsAmmoFull() || BulletAmount <= 0) return false;
+
+	// Локальная функция для заполнения одной шкалы патронов до максимума.
+	auto FillAmmo = [](int32& ValueToBeFilled, const int32& MaxValue, int32& ConsumableBulletAmount)
 	{
-		UE_LOG(LogBaseWeapon, Display, TEXT("Ammo was empty"));
-		CurrentAmmo.Clips = FMath::Clamp(ClipsAmount, 0, DefaultAmmo.Clips + 1);
-		OnClipEmpty.Broadcast(this);
-	}
-	else if (CurrentAmmo.Clips < DefaultAmmo.Clips)
-	{
-		const auto NextClipsAmount = CurrentAmmo.Clips + ClipsAmount;
-		if (DefaultAmmo.Clips >= NextClipsAmount)
+		const int32 NeedToRefillAmount = MaxValue - ValueToBeFilled;
+		if (NeedToRefillAmount <= 0)
 		{
-			UE_LOG(LogBaseWeapon, Display, TEXT("Clips were added"));
-			CurrentAmmo.Clips = NextClipsAmount;
+			return;
 		}
-		else
-		{
-			UE_LOG(LogBaseWeapon, Display, TEXT("Ammo is full now"));
-			CurrentAmmo.Clips = DefaultAmmo.Clips;
-			CurrentAmmo.Bullets = DefaultAmmo.Bullets;
-		}
-	}
-	else
-	{
-		UE_LOG(LogBaseWeapon, Display, TEXT("Bullets were added"));
-		CurrentAmmo.Bullets = DefaultAmmo.Bullets;
-	}
+
+		const int32 Refilling = FMath::Min(ConsumableBulletAmount, NeedToRefillAmount);
+
+		ConsumableBulletAmount -= Refilling;
+		ValueToBeFilled += Refilling;
+	};
+
+	int32 RemainingBulletAmount = BulletAmount;
+	FillAmmo(CurrentAmmo.Bullets, DefaultAmmo.Bullets, RemainingBulletAmount);
+	FillAmmo(CurrentAmmo.SpareBullets, DefaultAmmo.SpareBullets, RemainingBulletAmount);
+	
 	return true;
 }
 
 bool ASTUBaseWeapon::IsAmmoFull() const
 {
-	return CurrentAmmo.Clips == DefaultAmmo.Clips && CurrentAmmo.Bullets == DefaultAmmo.Bullets;
+	return CurrentAmmo.SpareBullets >= DefaultAmmo.SpareBullets && CurrentAmmo.Bullets >= DefaultAmmo.Bullets;
 }
 
 void ASTUBaseWeapon::LogAmmo()
 {
 	FString AmmoInfo = "Ammo: " + FString::FromInt(CurrentAmmo.Bullets) + " / ";
-	AmmoInfo += CurrentAmmo.Infinite ? "Infinite" : FString::FromInt(CurrentAmmo.Clips);
+	AmmoInfo += CurrentAmmo.Infinite ? "Infinite" : FString::FromInt(CurrentAmmo.SpareBullets);
 	UE_LOG(LogBaseWeapon, Display, TEXT("%s"), *AmmoInfo);
 }
 

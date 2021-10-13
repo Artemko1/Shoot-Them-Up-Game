@@ -16,16 +16,16 @@ struct FAmmoData
 	GENERATED_BODY()
 
 	/**
-	* @brief Число пуль в магазине
+	* @brief Число пуль в текущем магазине
 	*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	int32 Bullets;
 
 	/**
-	* @brief Число магазинов
+	* @brief Число запасных пуль
 	*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (EditCondition = "!Infinite"))
-	int32 Clips;
+	int32 SpareBullets;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	bool Infinite;

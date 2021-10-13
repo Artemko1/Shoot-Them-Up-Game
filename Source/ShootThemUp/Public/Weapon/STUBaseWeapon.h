@@ -29,7 +29,7 @@ public:
 
 	FWeaponUIData GetUIData() const { return UIData; }
 	FAmmoData GetCurrentAmmoData() const { return CurrentAmmo; }
-	bool TryToAddAmmo(int32 ClipsAmount);
+	bool TryToAddAmmo(int32 BulletAmount);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")

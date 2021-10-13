@@ -26,7 +26,7 @@ public:
 
 	bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
 	bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
-	bool TryAddAmmo(const TSubclassOf<ASTUBaseWeapon> WeaponType, int32 ClipsAmount);
+	bool TryAddAmmo(const TSubclassOf<ASTUBaseWeapon> WeaponType, int32 BulletAmount);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (BlueprintBaseOnly))
