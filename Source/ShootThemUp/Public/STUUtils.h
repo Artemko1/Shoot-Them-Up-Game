@@ -1,13 +1,10 @@
 ﻿#pragma once
 
-#include "GameFramework/Pawn.h"
-#include "GameFramework/Controller.h"
-
 class FSTUUtils
 {
 public:
-	template<typename T>
-	static T* GetSTUPlayerComponent(APawn* PlayerPawn)
+	template <typename T>
+	static T* GetSTUPlayerComponent(AActor* PlayerPawn)
 	{
 		if (!PlayerPawn) return nullptr;
 
