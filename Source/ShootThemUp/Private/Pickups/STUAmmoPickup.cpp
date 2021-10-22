@@ -2,19 +2,17 @@
 
 
 #include "Pickups/STUAmmoPickup.h"
-
 #include "STUHealthComponent.h"
-#include "STUUtils.h"
 #include "STUWeaponComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogAmmoPickup, All, All);
 
 bool ASTUAmmoPickup::GivePickupTo(APawn* PlayerPawn)
 {
-	const auto HealthComponent = FSTUUtils::GetSTUPlayerComponent<USTUHealthComponent>(PlayerPawn);
+	const auto HealthComponent = PlayerPawn->FindComponentByClass<USTUHealthComponent>();
 	if (!HealthComponent || HealthComponent->IsDead()) return false;
 	
-	const auto WeaponComponent = FSTUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(PlayerPawn);
+	const auto WeaponComponent = PlayerPawn->FindComponentByClass<USTUWeaponComponent>();
 	if (!WeaponComponent) return false;
 	
 	return WeaponComponent->TryAddAmmo(WeaponType, BulletAmount);

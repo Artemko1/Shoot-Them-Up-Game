@@ -8,7 +8,7 @@
 
 bool USTUPlayerHUDWidget::Initialize()
 {
-	const auto HealthComponent = FSTUUtils::GetSTUPlayerComponent<USTUHealthComponent>(GetOwningPlayerPawn());
+	const auto HealthComponent = GetOwningPlayerPawn()->FindComponentByClass<USTUHealthComponent>();
 	if (HealthComponent)
 	{
 		HealthComponent->OnHealthChanged.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
@@ -27,7 +27,7 @@ void USTUPlayerHUDWidget::OnHealthChanged(const float Health, const float Health
 
 float USTUPlayerHUDWidget::GetHealthPercent() const
 {
-	const auto HealthComponent = FSTUUtils::GetSTUPlayerComponent<USTUHealthComponent>(GetOwningPlayerPawn());
+	const auto HealthComponent = GetOwningPlayerPawn()->FindComponentByClass<USTUHealthComponent>();
 	if (!HealthComponent) return .0f;
 
 	return HealthComponent->GetHealthPercent();
@@ -35,7 +35,7 @@ float USTUPlayerHUDWidget::GetHealthPercent() const
 
 bool USTUPlayerHUDWidget::GetCurrentWeaponUIData(FWeaponUIData& UIData) const
 {
-	const auto WeaponComponent = FSTUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(GetOwningPlayerPawn());
+	const auto WeaponComponent = GetOwningPlayerPawn()->FindComponentByClass<USTUWeaponComponent>();
 	if (!WeaponComponent) return false;
 
 	return WeaponComponent->GetCurrentWeaponUIData(UIData);
@@ -44,7 +44,7 @@ bool USTUPlayerHUDWidget::GetCurrentWeaponUIData(FWeaponUIData& UIData) const
 
 bool USTUPlayerHUDWidget::GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const
 {
-	const auto WeaponComponent = FSTUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(GetOwningPlayerPawn());
+	const auto WeaponComponent = GetOwningPlayerPawn()->FindComponentByClass<USTUWeaponComponent>();
 	if (!WeaponComponent) return false;
 
 	return WeaponComponent->GetCurrentWeaponAmmoData(AmmoData);
@@ -52,7 +52,7 @@ bool USTUPlayerHUDWidget::GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const
 
 bool USTUPlayerHUDWidget::IsPlayerAlive() const
 {
-	const auto HealthComponent = FSTUUtils::GetSTUPlayerComponent<USTUHealthComponent>(GetOwningPlayerPawn());
+	const auto HealthComponent = GetOwningPlayerPawn()->FindComponentByClass<USTUHealthComponent>();
 	return HealthComponent && !HealthComponent->IsDead();
 }
 
