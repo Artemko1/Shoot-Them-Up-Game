@@ -16,9 +16,9 @@ void USTUFindEnemyService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	const auto Blackboard = OwnerComp.GetBlackboardComponent();
-	if (!Blackboard) return;
-
 	const auto Controller = OwnerComp.GetAIOwner();
+	if (!Blackboard || !Controller) return;
+
 	const auto PerceptionComponent = Controller->FindComponentByClass<USTUAIPerceptionComponent>();
 	if (!PerceptionComponent) return;
 

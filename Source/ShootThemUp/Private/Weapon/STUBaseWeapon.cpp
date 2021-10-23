@@ -56,9 +56,21 @@ bool ASTUBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
 
 bool ASTUBaseWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const
 {
-	const auto Controller = GetPlayerController();
-	if (!Controller) return false;
-	Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	const auto Character = Cast<ACharacter>(GetOwner());
+	if (!Character) return false;
+	if (Character->IsPlayerControlled())
+	{
+		const auto Controller = GetPlayerController();
+		if (!Controller) return false;
+		Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	}
+	else
+	{
+		ViewLocation = GetMuzzleWorldLocation();
+		ViewRotation = WeaponMesh->GetSocketRotation(MuzzleSocketName);
+	}
+
+	
 	return true;
 }
 
@@ -132,7 +144,7 @@ void ASTUBaseWeapon::ChangeClip()
 		if (NeededAmmo <= 0)
 		{
 			constexpr auto LogMessage =
-				"Reload is not needed because weapon has more bullets in current clip than it would get after reloadReload is not needed because weapon has more bullets in current clip than it would get after reloadReload is not needed because weapon has more bullets in current clip than it would get after reload";
+				"Reload is not needed because weapon has more bullets in current clip than it would get after reload";
 			UE_LOG(LogBaseWeapon, Warning, TEXT("%s"), LogMessage);
 			return;
 		}

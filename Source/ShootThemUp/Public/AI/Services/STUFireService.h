@@ -4,21 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTService.h"
-#include "STUFindEnemyService.generated.h"
+#include "STUFireService.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SHOOTTHEMUP_API USTUFindEnemyService : public UBTService
+class SHOOTTHEMUP_API USTUFireService : public UBTService
 {
 	GENERATED_BODY()
 public:
-	USTUFindEnemyService();
+	USTUFireService();
 protected:
-	/**
-	 * @brief В этот ключ записывается найденный враг.
-	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector EnemyActorKey;
 	
