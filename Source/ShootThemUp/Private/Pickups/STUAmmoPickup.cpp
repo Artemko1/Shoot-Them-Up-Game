@@ -9,6 +9,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogAmmoPickup, All, All);
 
 bool ASTUAmmoPickup::GivePickupTo(APawn* PlayerPawn)
 {
+	if (!PlayerPawn) return false;
 	const auto HealthComponent = PlayerPawn->FindComponentByClass<USTUHealthComponent>();
 	if (!HealthComponent || HealthComponent->IsDead()) return false;
 	
