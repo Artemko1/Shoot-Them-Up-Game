@@ -52,9 +52,9 @@ void ASTURifleWeapon::MakeShot()
 		StopFire();
 		return;
 	}
-
+	
 	FHitResult HitResult;
-	MakeHit(HitResult, TraceStart, TraceEnd);
+	MakeHit(HitResult, TraceStart, TraceEnd); // Кидает рейкаст из камеры до точки в центре экрана
 
 	FVector TraceFXEnd = TraceEnd;
 	if (HitResult.bBlockingHit)

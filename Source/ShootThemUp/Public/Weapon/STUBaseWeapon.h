@@ -30,6 +30,7 @@ public:
 	FWeaponUIData GetUIData() const { return UIData; }
 	FAmmoData GetCurrentAmmoData() const { return CurrentAmmo; }
 	bool TryToAddAmmo(int32 BulletAmount);
+	bool IsAmmoEmpty() const;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -61,7 +62,6 @@ protected:
 	void MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const;
 
 	void DecreaseAmmo();
-	bool IsAmmoEmpty() const;
 	bool IsClipEmpty() const;
 	bool IsAmmoFull() const;
 	
