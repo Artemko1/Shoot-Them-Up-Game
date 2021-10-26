@@ -32,6 +32,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	float GetMovementDirection() const;
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
@@ -61,6 +62,8 @@ protected:
 	FVector2D LandedDamage = FVector2D(10.0f, 100.0f);
 
 	virtual void BeginPlay() override;
+	virtual void OnDeath();
+
 private:
 	bool bWantsToRun = false;
 	bool bIsMovingForward = false;
@@ -70,7 +73,6 @@ private:
 	void OnStartRunning();
 	void OnStopRunning();
 
-	void OnDeath();
 	void OnHealthChanged(float Health, float HealthDelta) const;
 
 	UFUNCTION()
