@@ -27,11 +27,12 @@ public:
 	bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
 	bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
 	bool TryAddAmmo(const TSubclassOf<ASTUBaseWeapon> WeaponType, int32 BulletAmount);
+	bool NeedAmmo(const TSubclassOf<ASTUBaseWeapon> WeaponType);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (BlueprintBaseOnly))
 	TArray<FWeaponData> WeaponData;
-	
+
 	UPROPERTY()
 	ASTUBaseWeapon* CurrentWeapon = nullptr;
 
@@ -49,17 +50,17 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* EquipAnimMontage;
-	
+
 	int32 CurrentWeaponIndex = 0;
-	
+
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-	
+
 	bool CanFire() const;
 	bool CanEquip() const;
-	
+
 	void EquipWeapon(int32 WeaponIndex);
-	
+
 private:
 	UPROPERTY()
 	UAnimMontage* CurrentReloadAnimMontage = nullptr;
@@ -81,4 +82,7 @@ private:
 
 	void OnEmptyClip(ASTUBaseWeapon* AmmoEmptyWeapon);
 	void ChangeClip();
+	
+	ASTUBaseWeapon* GetWeaponOfType(const TSubclassOf<ASTUBaseWeapon> WeaponType);
 };
+

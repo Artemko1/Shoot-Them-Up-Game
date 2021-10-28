@@ -220,14 +220,18 @@ bool USTUWeaponComponent::GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const
 
 bool USTUWeaponComponent::TryAddAmmo(const TSubclassOf<ASTUBaseWeapon> WeaponType, const int32 BulletAmount)
 {
-	for (const auto Weapon : Weapons)
-	{
-		if (Weapon && Weapon->IsA(WeaponType))
-		{
-			return Weapon->TryToAddAmmo(BulletAmount);
-		}
-	}
-	return false;
+	ASTUBaseWeapon* Weapon = GetWeaponOfType(WeaponType);
+	if (!Weapon) return false;
+
+	return Weapon->TryToAddAmmo(BulletAmount);
+}
+
+bool USTUWeaponComponent::NeedAmmo(const TSubclassOf<ASTUBaseWeapon> WeaponType)
+{
+	ASTUBaseWeapon* Weapon = GetWeaponOfType(WeaponType);
+	if (!Weapon) return false;
+	
+	return !Weapon->IsAmmoFull();
 }
 
 void USTUWeaponComponent::OnEmptyClip(ASTUBaseWeapon* AmmoEmptyWeapon)
@@ -249,4 +253,17 @@ void USTUWeaponComponent::ChangeClip()
 	CurrentWeapon->ChangeClip();
 	ReloadAnimInProgress = true;
 	PlayAnimMontage(CurrentReloadAnimMontage);
+}
+
+ASTUBaseWeapon* USTUWeaponComponent::GetWeaponOfType(const TSubclassOf<ASTUBaseWeapon> WeaponType)
+{
+	for (const auto Weapon : Weapons)
+	{
+		if (Weapon && Weapon->IsA(WeaponType))
+		{
+			return Weapon;
+		}
+	}
+
+	return nullptr;
 }
