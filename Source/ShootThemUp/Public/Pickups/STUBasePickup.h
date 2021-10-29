@@ -15,8 +15,9 @@ class SHOOTTHEMUP_API ASTUBasePickup : public AActor
 
 public:
 	ASTUBasePickup();
-	
+
 	virtual void Tick(float DeltaTime) override;
+	bool CouldBeTaken() const;
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Pickup")
@@ -27,11 +28,13 @@ protected:
 
 	virtual void BeginPlay() override;
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-	
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Pickup", meta = (ClampMin = "-360", ClampMax = "360"))
 	float RotationYaw = 135.f;
-	
+
+	FTimerHandle RespawnTimerHandle;
+
 	virtual bool GivePickupTo(APawn* PlayerPawn);
 	void PickupWasTaken();
 	void Respawn() const;

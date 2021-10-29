@@ -20,7 +20,7 @@ ASTUBasePickup::ASTUBasePickup()
 void ASTUBasePickup::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	check(CollisionComponent);
 }
 
@@ -29,6 +29,11 @@ void ASTUBasePickup::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	AddActorLocalRotation(FRotator(0.f, RotationYaw * DeltaTime, 0.f));
+}
+
+bool ASTUBasePickup::CouldBeTaken() const
+{
+	return !GetWorldTimerManager().IsTimerActive(RespawnTimerHandle);
 }
 
 void ASTUBasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -55,7 +60,6 @@ void ASTUBasePickup::PickupWasTaken()
 		GetRootComponent()->SetVisibility(false, true);
 	}
 
-	FTimerHandle RespawnTimerHandle;
 	GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ASTUBasePickup::Respawn, RespawnTime);
 }
 
