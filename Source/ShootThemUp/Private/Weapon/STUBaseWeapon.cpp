@@ -70,7 +70,7 @@ bool ASTUBaseWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRot
 		ViewRotation = WeaponMesh->GetSocketRotation(MuzzleSocketName);
 	}
 
-	
+
 	return true;
 }
 
@@ -134,29 +134,10 @@ void ASTUBaseWeapon::ChangeClip()
 	}
 	else
 	{
-		if (CurrentAmmo.SpareBullets == 0)
-		{
-			UE_LOG(LogBaseWeapon, Warning, TEXT("No more spare bullets"));
-			return;
-		}
-
-		const auto NeededAmmo = DefaultAmmo.Bullets - CurrentAmmo.Bullets;
-		if (NeededAmmo <= 0)
-		{
-			constexpr auto LogMessage =
-				"Reload is not needed because weapon has more bullets in current clip than it would get after reload";
-			UE_LOG(LogBaseWeapon, Warning, TEXT("%s"), LogMessage);
-			return;
-		}
-
-		const auto AmmoToBeRefilled = FMath::Min(NeededAmmo, CurrentAmmo.SpareBullets);
-		checkf(AmmoToBeRefilled > 0, TEXT("Must refill positive amount of ammo!"))
-
-		CurrentAmmo.SpareBullets -= AmmoToBeRefilled;
-		CurrentAmmo.Bullets += AmmoToBeRefilled;
+		FillAmmo(CurrentAmmo.Bullets, DefaultAmmo.Bullets, CurrentAmmo.SpareBullets);
 	}
 
-	UE_LOG(LogBaseWeapon, Display, TEXT("---- CHANGE CLIP ----"));
+	// UE_LOG(LogBaseWeapon, Display, TEXT("---- CHANGE CLIP ----"));
 }
 
 bool ASTUBaseWeapon::CanReload() const
@@ -169,25 +150,10 @@ bool ASTUBaseWeapon::TryToAddAmmo(const int32 BulletAmount)
 {
 	if (IsAmmoFull() || BulletAmount <= 0) return false;
 
-	// Локальная функция для заполнения одной шкалы патронов до максимума.
-	auto FillAmmo = [](int32& ValueToBeFilled, const int32& MaxValue, int32& ConsumableBulletAmount)
-	{
-		const int32 NeedToRefillAmount = MaxValue - ValueToBeFilled;
-		if (NeedToRefillAmount <= 0)
-		{
-			return;
-		}
-
-		const int32 Refilling = FMath::Min(ConsumableBulletAmount, NeedToRefillAmount);
-
-		ConsumableBulletAmount -= Refilling;
-		ValueToBeFilled += Refilling;
-	};
-
 	int32 RemainingBulletAmount = BulletAmount;
 	FillAmmo(CurrentAmmo.Bullets, DefaultAmmo.Bullets, RemainingBulletAmount);
 	FillAmmo(CurrentAmmo.SpareBullets, DefaultAmmo.SpareBullets, RemainingBulletAmount);
-	
+
 	return true;
 }
 
@@ -212,4 +178,18 @@ UNiagaraComponent* ASTUBaseWeapon::SpawnMuzzleFX() const
 	                                                    FRotator::ZeroRotator,
 	                                                    EAttachLocation::SnapToTarget,
 	                                                    true);
+}
+
+void ASTUBaseWeapon::FillAmmo(int32& ValueToBeFilled, const int32& MaxValue, int32& ConsumableBulletAmount) const
+{
+	const int32 NeedToRefillAmount = MaxValue - ValueToBeFilled;
+	if (NeedToRefillAmount <= 0 || ConsumableBulletAmount <= 0)
+	{
+		return;
+	}
+
+	const int32 Refilling = FMath::Min(ConsumableBulletAmount, NeedToRefillAmount);
+
+	ConsumableBulletAmount -= Refilling;
+	ValueToBeFilled += Refilling;
 }

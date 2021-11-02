@@ -71,4 +71,7 @@ protected:
 
 private:
 	FAmmoData CurrentAmmo;
+
+	/// Заполняет одну шкалу патронов до максимума.
+	void FillAmmo(int32& ValueToBeFilled, const int32& MaxValue, int32& ConsumableBulletAmount) const;
 };
