@@ -1,6 +1,5 @@
 // Shoot Them Up Game. All Rights Reserved.
 
-
 #include "UI/STUGameHUD.h"
 #include "Blueprint/UserWidget.h"
 #include "Engine/Canvas.h"
@@ -15,6 +14,7 @@ void ASTUGameHUD::DrawHUD()
 void ASTUGameHUD::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	const auto PlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass);
 	if (PlayerHUDWidget)
 	{
@@ -24,12 +24,15 @@ void ASTUGameHUD::BeginPlay()
 
 void ASTUGameHUD::DrawCrossHair()
 {
-	const TInterval<float> Center(Canvas->SizeX * 0.5f, Canvas->SizeY * 0.5f);
+	const FVector2D Center(Canvas->SizeX * 0.5f, Canvas->SizeY * 0.5f);
 
-	constexpr float HalfLineSize = 10.0f;
+	constexpr float LineSize = 12.0f;
+	constexpr float Offset = 6.0f;
 	constexpr float LineThickness = 2.0f;
 	const FLinearColor LineColor = FLinearColor::Green;
 
-	DrawLine(Center.Min - HalfLineSize, Center.Max, Center.Min + HalfLineSize, Center.Max, LineColor, LineThickness);
-	DrawLine(Center.Min, Center.Max - HalfLineSize, Center.Min, Center.Max + HalfLineSize, LineColor, LineThickness);
+	DrawLine(Center.X - Offset, Center.Y, Center.X - Offset - LineSize, Center.Y, LineColor, LineThickness);
+	DrawLine(Center.X + Offset, Center.Y, Center.X + Offset + LineSize, Center.Y, LineColor, LineThickness);
+	DrawLine(Center.X, Center.Y - Offset, Center.X, Center.Y - Offset - LineSize, LineColor, LineThickness);
+	DrawLine(Center.X, Center.Y + Offset, Center.X, Center.Y + Offset + LineSize, LineColor, LineThickness);
 }
