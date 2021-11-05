@@ -18,6 +18,8 @@ public:
 
 	virtual void StartPlay() override;
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
+
+	void Killed(AController* KillerController, AController* VictimController);
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
@@ -41,8 +43,10 @@ private:
 	void ResetPlayers();
 	void ResetOnePlayer(AController* Controller);
 
-	void CreateTeamsInfo();
+	void CreateTeamsInfo() const;
 	FLinearColor DetermineColorByTeamId(int32 TeamID) const;
 	static void SetPlayerColor(AController* Controller);
+
+	void LogPlayerInfo() const;
 };
 

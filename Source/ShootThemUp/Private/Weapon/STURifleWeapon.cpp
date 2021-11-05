@@ -89,7 +89,7 @@ void ASTURifleWeapon::MakeDamage(const FHitResult& HitResult)
 	AActor* Target = HitResult.GetActor();
 	if (!Target) return;
 
-	Target->TakeDamage(DamageAmount, FPointDamageEvent(), GetPlayerController(), this);
+	Target->TakeDamage(DamageAmount, FPointDamageEvent(), GetController(), this);
 }
 
 void ASTURifleWeapon::InitMuzzleFX()
@@ -124,4 +124,10 @@ void ASTURifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& Tra
 	{
 		UE_LOG(LogRifleWeapon, Warning, TEXT("TraceFX niagara system is null"));
 	}
+}
+
+AController* ASTURifleWeapon::GetController() const
+{
+	const auto Pawn = Cast<APawn>(GetOwner());
+	return Pawn ? Pawn->GetController() : nullptr;
 }

@@ -76,6 +76,7 @@ void ASTUGameModeBase::GameTimerUpdate()
 		else
 		{
 			UE_LOG(LogSTUGameModeBase, Display, TEXT("===== GAME OVER ====="));
+			LogPlayerInfo();
 		}
 	}
 }
@@ -101,7 +102,7 @@ void ASTUGameModeBase::ResetOnePlayer(AController* Controller)
 	SetPlayerColor(Controller);
 }
 
-void ASTUGameModeBase::CreateTeamsInfo()
+void ASTUGameModeBase::CreateTeamsInfo() const
 {
 	if (!GetWorld()) return;
 
@@ -123,15 +124,15 @@ void ASTUGameModeBase::CreateTeamsInfo()
 }
 
 FLinearColor ASTUGameModeBase::DetermineColorByTeamId(const int32 TeamID) const
-{	
+{
 	if (TeamID > 0 && TeamID - 1 < GameData.TeamColors.Num())
 	{
 		return GameData.TeamColors[TeamID - 1];
 	}
-	
+
 	UE_LOG(LogSTUGameModeBase, Warning, TEXT("No color for team id: %i, set to default: %s"), TeamID,
 	       *GameData.DefaultTeamColor.ToString());
-	
+
 	return GameData.DefaultTeamColor;
 }
 
@@ -141,9 +142,40 @@ void ASTUGameModeBase::SetPlayerColor(AController* Controller)
 
 	const auto Character = Controller->GetPawn<ASTUBaseCharacter>();
 	if (!Character) return;
-	
+
 	const auto PlayerState = Character->GetPlayerState<ASTUPlayerState>();
-	if (!PlayerState) return;	
-	
+	if (!PlayerState) return;
+
 	Character->SetPlayerColor(PlayerState->GetTeamColor());
+}
+
+void ASTUGameModeBase::Killed(AController* KillerController, AController* VictimController)
+{
+	const auto KillerPlayerState = KillerController ? KillerController->GetPlayerState<ASTUPlayerState>() : nullptr;
+	const auto VictimPlayerState = VictimController ? VictimController->GetPlayerState<ASTUPlayerState>() : nullptr;
+
+	if (KillerPlayerState)
+	{
+		KillerPlayerState->AddKill();
+	}
+	if (VictimPlayerState)
+	{
+		VictimPlayerState->AddDeath();
+	}
+}
+
+void ASTUGameModeBase::LogPlayerInfo() const
+{
+	if (!GetWorld()) return;
+
+	for (auto It = GetWorld()->GetControllerIterator(); It; ++It)
+	{
+		const auto Controller = It->Get();
+		if (!Controller) continue;
+
+		const auto PlayerState = Controller->GetPlayerState<ASTUPlayerState>();
+		if (!PlayerState) continue;
+
+		PlayerState->LogInfo();
+	}
 }

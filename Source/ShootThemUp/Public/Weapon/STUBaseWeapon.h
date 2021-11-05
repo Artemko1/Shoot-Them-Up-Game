@@ -58,7 +58,6 @@ protected:
 	virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 
 	bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
-	APlayerController* GetPlayerController() const;
 	FVector GetMuzzleWorldLocation() const;
 	void MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const;
 
