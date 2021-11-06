@@ -19,11 +19,12 @@ public:
 	virtual void StartPlay() override;
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
 
-	void Killed(AController* KillerController, AController* VictimController);
+	void Killed(AController* KillerController, AController* VictimController) const;
 
 	int32 GetCurrentRoundNum() const { return CurrentRound; }
 	int32 GetTotalRoundsNum() const { return GameData.RoundsNum; }
 	int32 GetRoundSecondsRemaining() const { return RoundCountDown; }
+	void RespawnRequest(AController* Controller);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
@@ -52,4 +53,6 @@ private:
 	static void SetPlayerColor(AController* Controller);
 
 	void LogPlayerInfo() const;
+
+	void StartRespawn(const AController* Controller) const;
 };

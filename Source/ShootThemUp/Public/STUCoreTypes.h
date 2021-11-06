@@ -73,16 +73,15 @@ struct FDecalData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	UMaterialInterface* Material;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	FVector Size = FVector(5.f);
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	float LifeTime = 5.f;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	float FadeOutTime = 0.7f;
-	
 };
 
 USTRUCT(BlueprintType)
@@ -92,9 +91,9 @@ struct FImpactData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	UNiagaraSystem* NiagaraEffect;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-	FDecalData DecalData;	
+	FDecalData DecalData;
 };
 
 // VFX end
@@ -104,13 +103,13 @@ USTRUCT(BlueprintType)
 struct FGameData
 {
 	GENERATED_BODY()
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "1", ClampMax = "100"))
 	int32 PlayersNum = 2;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "1", ClampMax = "10"))
 	int32 RoundsNum = 4;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "3", ClampMax = "300"))
 	int32 RoundTime = 10; // in seconds
 
@@ -119,6 +118,12 @@ struct FGameData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "3", ClampMax = "300"))
 	TArray<FLinearColor> TeamColors;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "1", ClampMax = "20"))
+	int32 RespawnTime = 5; // in seconds
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "3", ClampMax = "20"))
+	int32 MinRoundTimeForRespawn = 10; // in seconds	
 };
 
 // Game end
