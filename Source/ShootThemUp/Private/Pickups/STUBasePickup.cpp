@@ -65,9 +65,10 @@ void ASTUBasePickup::PickupWasTaken()
 
 void ASTUBasePickup::Respawn() const
 {
-	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
 	if (GetRootComponent())
 	{
 		GetRootComponent()->SetVisibility(true, true);
 	}
+	
+	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
 }
