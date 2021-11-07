@@ -6,15 +6,24 @@
 
 bool USTUPlayerHUDWidget::Initialize()
 {
-	const APawn* Pawn = GetOwningPlayerPawn();
-	if (!Pawn) return false;
+	if (const auto Controller = GetOwningPlayer())
+	{
+		Controller->GetOnNewPawnNotifier().AddUObject(this, &USTUPlayerHUDWidget::OnNewPawn);
+		OnNewPawn(GetOwningPlayerPawn());
+	}
+
+	return Super::Initialize();
+}
+
+void USTUPlayerHUDWidget::OnNewPawn(APawn* Pawn)
+{
+	if (!Pawn) return;
+
 	const auto HealthComponent = Pawn->FindComponentByClass<USTUHealthComponent>();
 	if (HealthComponent)
 	{
 		HealthComponent->OnHealthChanged.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
 	}
-
-	return Super::Initialize();
 }
 
 void USTUPlayerHUDWidget::OnHealthChanged(const float Health, const float HealthDelta)

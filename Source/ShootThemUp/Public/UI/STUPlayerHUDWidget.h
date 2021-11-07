@@ -34,5 +34,6 @@ public:
 	virtual bool Initialize() override;
 	
 private:
+	void OnNewPawn(APawn* Pawn);
 	void OnHealthChanged(float Health, float HealthDelta);
 };

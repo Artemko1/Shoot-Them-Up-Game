@@ -55,4 +55,6 @@ private:
 	void LogPlayerInfo() const;
 
 	void StartRespawn(const AController* Controller) const;
+	
+	void GameOver() const;
 };
