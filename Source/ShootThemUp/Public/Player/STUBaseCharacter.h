@@ -8,8 +8,6 @@
 #include "GameFramework/Character.h"
 #include "STUBaseCharacter.generated.h"
 
-class UCameraComponent;
-class USpringArmComponent;
 class USTUHealthComponent;
 class UTextRenderComponent;
 class USTUWeaponComponent;
@@ -24,11 +22,9 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
-	bool IsRunning() const;
+	virtual bool IsRunning() const { return false; };
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	float GetMovementDirection() const;
@@ -36,16 +32,10 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	USpringArmComponent* SpringArmComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	UCameraComponent* CameraComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USTUHealthComponent* HealthComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	UTextRenderComponent* HealthTextComponent;
+	UTextRenderComponent* HealthTextComponent; //todo delete
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	USTUWeaponComponent* WeaponComponent;
@@ -69,14 +59,6 @@ protected:
 	virtual void OnDeath();
 
 private:
-	bool bWantsToRun = false;
-	bool bIsMovingForward = false;
-
-	void MoveForward(float Amount);
-	void MoveRight(float Amount);
-	void OnStartRunning();
-	void OnStopRunning();
-
 	void OnHealthChanged(float Health, float HealthDelta) const;
 
 	UFUNCTION()
