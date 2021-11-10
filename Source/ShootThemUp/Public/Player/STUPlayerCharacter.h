@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "STUPlayerCharacter.generated.h"
 
+class USphereComponent;
 class UCameraComponent;
 class USpringArmComponent;
 
@@ -18,9 +19,6 @@ class SHOOTTHEMUP_API ASTUPlayerCharacter : public ASTUBaseCharacter
 public:
 	explicit ASTUPlayerCharacter(const FObjectInitializer& ObjInit);
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	virtual bool IsRunning() const override;
 
 protected:
@@ -29,6 +27,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UCameraComponent* CameraComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	USphereComponent* CameraCollisionComponent;
+
+	virtual void BeginPlay() override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void OnDeath() override;
 
@@ -40,4 +44,16 @@ private:
 	void MoveRight(float Amount);
 	void OnStartRunning();
 	void OnStopRunning();
+
+
+	UFUNCTION()
+	void OnCameraCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	                                   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+	                                   const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnCameraCollisionEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	                                 int32 OtherBodyIndex);
+
+	void CheckCameraOverlap() const;
 };
