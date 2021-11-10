@@ -64,6 +64,7 @@ bool ASTUBaseWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRot
 		const auto Controller = Character->GetController<APlayerController>();
 		if (!Controller) return false;
 		Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+		ViewLocation = ViewLocation + ViewRotation.Vector() * 350; // Добавляем примерное расстояние от камеры до персонажа
 	}
 	else
 	{

@@ -2,6 +2,8 @@
 
 
 #include "Weapon/STURifleWeapon.h"
+
+#include "DrawDebugHelpers.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "STUWeaponFXComponent.h"
@@ -44,19 +46,22 @@ void ASTURifleWeapon::MakeShot()
 		return;
 	}
 
-	FVector TraceStart;
-	FVector TraceEnd;
+	FVector AimTraceStart;
+	FVector AimTraceEnd;
 
-	if (!GetTraceData(TraceStart, TraceEnd))
+	if (!GetTraceData(AimTraceStart, AimTraceEnd))
 	{
 		StopFire();
 		return;
 	}
-	
-	FHitResult HitResult;
-	MakeHit(HitResult, TraceStart, TraceEnd); // Кидает рейкаст из камеры до точки в центре экрана
 
-	FVector TraceFXEnd = TraceEnd;
+	FHitResult HitResult;
+	MakeHit(HitResult, AimTraceStart, AimTraceEnd); // Кидает рейкаст из камеры (для игрока) до точки в центре экрана
+
+	// Линия, по которой пускается луч стрельбы
+	// DrawDebugLine(GetWorld(), AimTraceStart, AimTraceEnd, FColor::Red, false, 2);
+
+	FVector TraceFXEnd = AimTraceEnd;
 	if (HitResult.bBlockingHit)
 	{
 		TraceFXEnd = HitResult.ImpactPoint;
@@ -76,7 +81,7 @@ bool ASTURifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
 	const bool bPlayerViewPoint = GetPlayerViewPoint(ViewLocation, ViewRotation);
 	if (!bPlayerViewPoint) return false;
 
-	TraceStart = ViewLocation + ViewRotation.Vector() * 350; // Добавляем примерное расстояние от камеры до персонажа
+	TraceStart = ViewLocation;
 
 	const float HalfRad = FMath::DegreesToRadians(BulletSpread);
 	const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), HalfRad);

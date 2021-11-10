@@ -48,10 +48,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	FWeaponUIData UIData;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	UNiagaraSystem* MuzzleFX;
-	
+
 	virtual void BeginPlay() override;
 
 	virtual void MakeShot();
@@ -59,11 +59,16 @@ protected:
 
 	bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
 	FVector GetMuzzleWorldLocation() const;
+
+
+	/**
+	 * @brief Кидает рейкаст и возвращает Hit первого объекта на пути
+	 */
 	void MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const;
 
 	void DecreaseAmmo();
 	bool IsClipEmpty() const;
-	
+
 	void LogAmmo();
 
 	UNiagaraComponent* SpawnMuzzleFX() const;
