@@ -126,4 +126,15 @@ struct FGameData
 	int32 MinRoundTimeForRespawn = 10; // in seconds	
 };
 
+UENUM(BlueprintType)
+enum class ESTUMatchState : uint8
+{
+	WaitingToStart = 0,
+	InProgress,
+	Pause,
+	GameOver
+};
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FMatchStateChangedSignature, ESTUMatchState)
+
 // Game end

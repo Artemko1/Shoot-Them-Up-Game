@@ -1,8 +1,12 @@
 // Shoot Them Up Game. All Rights Reserved.
 
 #include "UI/STUGameHUD.h"
+
+#include "STUGameModeBase.h"
 #include "Blueprint/UserWidget.h"
 #include "Engine/Canvas.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogSTUGameHUD, Display, All);
 
 void ASTUGameHUD::DrawHUD()
 {
@@ -20,6 +24,21 @@ void ASTUGameHUD::BeginPlay()
 	{
 		PlayerHUDWidget->AddToViewport();
 	}
+
+	if (GetWorld())
+	{
+		const auto GameMode = GetWorld()->GetAuthGameMode<ASTUGameModeBase>();
+		if (GameMode)
+		{
+			GameMode->OnMatchStateChanged.AddUObject(this, &ASTUGameHUD::OnMatchStateChanged);
+		}
+
+	}
+}
+
+void ASTUGameHUD::OnMatchStateChanged(ESTUMatchState State)
+{
+	UE_LOG(LogSTUGameHUD, Display, TEXT("Match state changed: %s"), *UEnum::GetValueAsString(State));
 }
 
 void ASTUGameHUD::DrawCrossHair()

@@ -28,6 +28,8 @@ void ASTUGameModeBase::StartPlay()
 
 	CurrentRound = 1;
 	StartRound();
+	
+	SetMatchState(ESTUMatchState::InProgress);
 }
 
 UClass* ASTUGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
@@ -200,7 +202,7 @@ void ASTUGameModeBase::StartRespawn(const AController* Controller) const
 	RespawnComponent->Respawn(GameData.RespawnTime);
 }
 
-void ASTUGameModeBase::GameOver() const
+void ASTUGameModeBase::GameOver()
 {
 	UE_LOG(LogSTUGameModeBase, Display, TEXT("===== GAME OVER ====="));
 	LogPlayerInfo();
@@ -212,4 +214,17 @@ void ASTUGameModeBase::GameOver() const
 		Pawn->TurnOff();
 		Pawn->DisableInput(nullptr);
 	}
+
+	SetMatchState(ESTUMatchState::GameOver);
+}
+
+void ASTUGameModeBase::SetMatchState(const ESTUMatchState State)
+{
+	if (State == MatchState)
+	{
+		return;
+	}
+	
+	MatchState = State;
+	OnMatchStateChanged.Broadcast(MatchState);
 }

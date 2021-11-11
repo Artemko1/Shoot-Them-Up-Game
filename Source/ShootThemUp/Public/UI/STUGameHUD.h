@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "STUCoreTypes.h"
 #include "GameFramework/HUD.h"
 #include "STUGameHUD.generated.h"
 
@@ -22,5 +23,6 @@ public:
 	
 	virtual void BeginPlay() override;
 private:
+	void OnMatchStateChanged(ESTUMatchState State);
 	void DrawCrossHair();
 };
