@@ -6,11 +6,14 @@
 #include "STUGameModeBase.h"
 #include "STUPlayerState.h"
 #include "STUPlayerStatRowWidget.h"
-#include "STUUtils.h"
+#include "Components/Button.h"
 #include "Components/VerticalBox.h"
+#include "Kismet/GameplayStatics.h"
 
-bool USTUGameOverWidget::Initialize()
+void USTUGameOverWidget::NativeOnInitialized()
 {
+	Super::NativeOnInitialized();
+	
 	if (GetWorld())
 	{
 		const auto GameMode = GetWorld()->GetAuthGameMode<ASTUGameModeBase>();
@@ -20,7 +23,10 @@ bool USTUGameOverWidget::Initialize()
 		}
 	}
 
-	return Super::Initialize();
+	if (ResetLevelButton)
+	{
+		ResetLevelButton->OnClicked.AddDynamic(this, &USTUGameOverWidget::OnResetLevel);
+	}
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
@@ -57,4 +63,10 @@ void USTUGameOverWidget::UpdatePlayersStat() const
 
 		PlayerStatBox->AddChild(PlayerStatRowWidget);
 	}
+}
+
+void USTUGameOverWidget::OnResetLevel()
+{
+	const FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
+	UGameplayStatics::OpenLevel(this, FName(CurrentLevelName));
 }

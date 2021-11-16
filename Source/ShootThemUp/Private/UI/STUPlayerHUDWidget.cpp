@@ -4,15 +4,16 @@
 #include "STUHealthComponent.h"
 #include "STUWeaponComponent.h"
 
-bool USTUPlayerHUDWidget::Initialize()
+
+void USTUPlayerHUDWidget::NativeOnInitialized()
 {
+	Super::NativeOnInitialized();
+	
 	if (const auto Controller = GetOwningPlayer())
 	{
 		Controller->GetOnNewPawnNotifier().AddUObject(this, &USTUPlayerHUDWidget::OnNewPawn);
 		OnNewPawn(GetOwningPlayerPawn());
 	}
-
-	return Super::Initialize();
 }
 
 void USTUPlayerHUDWidget::OnNewPawn(APawn* Pawn)
