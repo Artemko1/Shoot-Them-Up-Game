@@ -3,7 +3,7 @@
 
 #include "Menu/UI/STUMenuWidget.h"
 
-#include "StUGameInstance.h"
+#include "STUGameInstance.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 
