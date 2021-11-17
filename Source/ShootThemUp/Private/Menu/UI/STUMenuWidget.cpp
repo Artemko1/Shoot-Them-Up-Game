@@ -3,8 +3,11 @@
 
 #include "Menu/UI/STUMenuWidget.h"
 
+#include "StUGameInstance.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogSTUMenuWidget, All, All);
 
 void USTUMenuWidget::NativeOnInitialized()
 {
@@ -15,9 +18,19 @@ void USTUMenuWidget::NativeOnInitialized()
 	StartGameButton->OnClicked.AddDynamic(this, &USTUMenuWidget::OnStartGame);
 }
 
+// ReSharper disable once CppMemberFunctionMayBeConst
 void USTUMenuWidget::OnStartGame()
 {
-	UE_LOG(LogTemp, Display, TEXT("OnStartGame"));
-	const FName StartupLevelName = "TestLevel";
-	UGameplayStatics::OpenLevel(this, StartupLevelName);
+	if (!GetWorld()) return;
+
+	const auto STUGameInstance = GetWorld()->GetGameInstance<USTUGameInstance>();
+	if (!STUGameInstance) return;
+
+	if (STUGameInstance->GetStartupLevelName().IsNone())
+	{
+		UE_LOG(LogSTUMenuWidget, Error, TEXT("Level name is NONE"));
+		return;
+	}
+
+	UGameplayStatics::OpenLevel(this, STUGameInstance->GetStartupLevelName());
 }
