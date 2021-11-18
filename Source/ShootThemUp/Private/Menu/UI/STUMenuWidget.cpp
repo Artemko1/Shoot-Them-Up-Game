@@ -13,9 +13,15 @@ void USTUMenuWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	if (!StartGameButton) return;
-
-	StartGameButton->OnClicked.AddDynamic(this, &USTUMenuWidget::OnStartGame);
+	if (StartGameButton)
+	{
+		StartGameButton->OnClicked.AddDynamic(this, &USTUMenuWidget::OnStartGame);
+	}
+	
+	if (QuitGameButton)
+	{
+		QuitGameButton->OnClicked.AddDynamic(this, &USTUMenuWidget::OnQuitGame);
+	}
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
@@ -33,4 +39,9 @@ void USTUMenuWidget::OnStartGame()
 	}
 
 	UGameplayStatics::OpenLevel(this, STUGameInstance->GetStartupLevelName());
+}
+
+void USTUMenuWidget::OnQuitGame()
+{
+	UKismetSystemLibrary::QuitGame(this, GetOwningPlayer(), EQuitPreference::Quit, false);
 }
