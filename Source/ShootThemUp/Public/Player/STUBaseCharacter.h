@@ -20,8 +20,6 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 public:
 	explicit ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer);
 
-	virtual void Tick(float DeltaTime) override;
-
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	virtual bool IsRunning() const { return false; };
@@ -33,9 +31,6 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USTUHealthComponent* HealthComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	UTextRenderComponent* HealthTextComponent; //todo delete
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	USTUWeaponComponent* WeaponComponent;
@@ -56,11 +51,11 @@ protected:
 	FName MaterialColorName = "Paint Color";
 
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 	virtual void OnDeath();
+	virtual void OnHealthChanged(float Health, float HealthDelta) const;
 
 private:
-	void OnHealthChanged(float Health, float HealthDelta) const;
-
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& Hit);
 };

@@ -18,11 +18,6 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
 	PrimaryActorTick.bCanEverTick = true;
 
 	HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
-
-	HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
-	HealthTextComponent->SetupAttachment(GetRootComponent());
-	HealthTextComponent->SetOwnerNoSee(true);
-
 	WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
 }
 
@@ -31,7 +26,6 @@ void ASTUBaseCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	check(HealthComponent);
-	check(HealthTextComponent);
 	check(GetCharacterMovement());
 	check(GetMesh());
 
@@ -42,14 +36,13 @@ void ASTUBaseCharacter::BeginPlay()
 	LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
 }
 
-void ASTUBaseCharacter::OnHealthChanged(const float Health, const float HealthDelta) const
-{
-	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
-}
-
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void ASTUBaseCharacter::OnHealthChanged(const float Health, const float HealthDelta) const
+{
 }
 
 float ASTUBaseCharacter::GetMovementDirection() const
