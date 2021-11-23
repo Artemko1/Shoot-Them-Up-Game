@@ -20,12 +20,14 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 public:
 	explicit ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer);
 
+	virtual FVector GetTargetLocation(AActor* RequestedBy) const override;
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	virtual bool IsRunning() const { return false; };
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	float GetMovementDirection() const;
+
 	void SetPlayerColor(const FLinearColor& Color) const;
 
 protected:
@@ -56,6 +58,9 @@ protected:
 	virtual void OnHealthChanged(float Health, float HealthDelta) const;
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	USceneComponent* TargetLocationPoint;
+
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& Hit);
 };

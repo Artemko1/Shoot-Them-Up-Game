@@ -19,6 +19,14 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
 
 	HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
 	WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
+
+	TargetLocationPoint = CreateDefaultSubobject<USceneComponent>("TargetLocationPoint");
+	TargetLocationPoint->SetupAttachment(GetRootComponent());
+}
+
+FVector ASTUBaseCharacter::GetTargetLocation(AActor* RequestedBy) const
+{
+	return TargetLocationPoint->GetComponentLocation();
 }
 
 void ASTUBaseCharacter::BeginPlay()
@@ -26,6 +34,8 @@ void ASTUBaseCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	check(HealthComponent);
+	check(WeaponComponent);
+	check(TargetLocationPoint);
 	check(GetCharacterMovement());
 	check(GetMesh());
 

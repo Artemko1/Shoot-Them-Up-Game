@@ -28,6 +28,7 @@ protected:
 
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float DeltaSeconds) override;
+	virtual void UpdateControlRotation(float DeltaTime, bool bUpdatePawn) override;
 private:
 	AActor* GetFocusOnActor() const;
 };
