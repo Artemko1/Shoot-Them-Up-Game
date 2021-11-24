@@ -3,13 +3,6 @@
 
 #include "UI/STUGameDataWidget.h"
 #include "STUGameModeBase.h"
-#include "STUPlayerState.h"
-
-int32 USTUGameDataWidget::GetKillsNum() const
-{
-	const auto PlayerState = GetOwningPlayerState<ASTUPlayerState>();
-	return PlayerState ? PlayerState->GetKillsNum() : 0;
-}
 
 int32 USTUGameDataWidget::GetRoundSecondsRemaining() const
 {
@@ -28,7 +21,6 @@ int32 USTUGameDataWidget::GetTotalRoundsNum() const
 	const auto GameMode = GetSTUGameMode();
 	return GameMode ? GameMode->GetTotalRoundsNum() : 0;
 }
-
 
 ASTUGameModeBase* USTUGameDataWidget::GetSTUGameMode() const
 {

@@ -13,7 +13,7 @@
 void USTUGameOverWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
-	
+
 	if (GetWorld())
 	{
 		const auto GameMode = GetWorld()->GetAuthGameMode<ASTUGameModeBase>();
@@ -43,7 +43,7 @@ void USTUGameOverWidget::UpdatePlayersStat() const
 	if (!GetWorld() || !PlayerStatBox) return;
 
 	PlayerStatBox->ClearChildren();
-	
+
 	for (auto It = GetWorld()->GetControllerIterator(); It; ++It)
 	{
 		const auto Controller = It->Get();
@@ -60,6 +60,7 @@ void USTUGameOverWidget::UpdatePlayersStat() const
 		PlayerStatRowWidget->SetDeaths(FText::AsNumber(PlayerState->GetDeathsNum()));
 		PlayerStatRowWidget->SetTeam(FText::AsNumber(PlayerState->GetTeamID()));
 		PlayerStatRowWidget->SetPlayerIndicatorVisibility(Controller->IsLocalPlayerController());
+		PlayerStatRowWidget->SetTeamColor(PlayerState->GetTeamColor());
 
 		PlayerStatBox->AddChild(PlayerStatRowWidget);
 	}
