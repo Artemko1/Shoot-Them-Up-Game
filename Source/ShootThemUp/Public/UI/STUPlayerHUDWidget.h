@@ -36,14 +36,14 @@ public:
 	int32 GetKillsNum() const;
 
 protected:
-	UPROPERTY(meta=(bindwidget))
+	UPROPERTY(meta=(BindWidget))
 	UProgressBar* HealthProgressBar;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	float PercentColorThreshold = 0.3f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-	FLinearColor GoodColor = FLinearColor::Yellow;
+	FLinearColor GoodColor = FLinearColor::Green;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	FLinearColor BadColor = FLinearColor::Red;

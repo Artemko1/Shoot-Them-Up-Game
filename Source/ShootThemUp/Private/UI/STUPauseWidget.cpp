@@ -3,6 +3,7 @@
 
 #include "UI/STUPauseWidget.h"
 
+#include "STUUWButton.h"
 #include "Components/Button.h"
 #include "GameFramework/GameModeBase.h"
 
@@ -11,9 +12,9 @@ void USTUPauseWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	if (ClearPauseButton)
+	if (ContinueUWButton && ContinueUWButton->GetButton())
 	{
-		ClearPauseButton->OnClicked.AddDynamic(this, &USTUPauseWidget::OnClearPause);
+		ContinueUWButton->GetButton()->OnClicked.AddDynamic(this, &USTUPauseWidget::OnClearPause);
 	}
 }
 

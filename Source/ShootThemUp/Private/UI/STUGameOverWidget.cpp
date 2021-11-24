@@ -6,6 +6,7 @@
 #include "STUGameModeBase.h"
 #include "STUPlayerState.h"
 #include "STUPlayerStatRowWidget.h"
+#include "STUUWButton.h"
 #include "Components/Button.h"
 #include "Components/VerticalBox.h"
 #include "Kismet/GameplayStatics.h"
@@ -23,9 +24,9 @@ void USTUGameOverWidget::NativeOnInitialized()
 		}
 	}
 
-	if (ResetLevelButton)
+	if (ResetLevelUWButton && ResetLevelUWButton->GetButton())
 	{
-		ResetLevelButton->OnClicked.AddDynamic(this, &USTUGameOverWidget::OnResetLevel);
+		ResetLevelUWButton->GetButton()->OnClicked.AddDynamic(this, &USTUGameOverWidget::OnResetLevel);
 	}
 }
 

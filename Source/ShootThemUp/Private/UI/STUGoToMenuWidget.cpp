@@ -13,9 +13,10 @@ void USTUGoToMenuWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	if (!GoToMenuButton) return;
-
-	GoToMenuButton->OnClicked.AddDynamic(this, &USTUGoToMenuWidget::OnGoToMenu);
+	if (MainButton)
+	{
+		MainButton->OnClicked.AddDynamic(this, &USTUGoToMenuWidget::OnGoToMenu);
+	}
 }
 
 void USTUGoToMenuWidget::OnGoToMenu()

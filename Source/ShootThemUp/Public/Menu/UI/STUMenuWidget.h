@@ -7,6 +7,7 @@
 #include "Blueprint/UserWidget.h"
 #include "STUMenuWidget.generated.h"
 
+class USTUUWButton;
 class USTUGameInstance;
 class USTULevelItemWidget;
 class UHorizontalBox;
@@ -19,7 +20,7 @@ class SHOOTTHEMUP_API USTUMenuWidget : public UUserWidget
 
 protected:
 	UPROPERTY(meta = (BindWidget))
-	UButton* StartGameButton;
+	USTUUWButton* StartGameUWButton;
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* QuitGameButton;

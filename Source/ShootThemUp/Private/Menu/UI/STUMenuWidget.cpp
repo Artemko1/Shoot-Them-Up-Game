@@ -4,6 +4,7 @@
 #include "Menu/UI/STUMenuWidget.h"
 
 #include "STUGameInstance.h"
+#include "STUUWButton.h"
 #include "Components/Button.h"
 #include "Components/HorizontalBox.h"
 #include "Kismet/GameplayStatics.h"
@@ -15,9 +16,9 @@ void USTUMenuWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	if (StartGameButton)
+	if (StartGameUWButton && StartGameUWButton->GetButton())
 	{
-		StartGameButton->OnClicked.AddDynamic(this, &USTUMenuWidget::OnStartGame);
+		StartGameUWButton->GetButton()->OnClicked.AddDynamic(this, &USTUMenuWidget::OnStartGame);
 	}
 
 	if (QuitGameButton)

@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "STUPauseWidget.generated.h"
 
-class UButton;
+class USTUUWButton;
 
 UCLASS()
 class SHOOTTHEMUP_API USTUPauseWidget : public UUserWidget
@@ -15,7 +15,7 @@ class SHOOTTHEMUP_API USTUPauseWidget : public UUserWidget
 
 protected:
 	UPROPERTY(meta=(BindWidget))
-	UButton* ClearPauseButton;
+	USTUUWButton* ContinueUWButton;
 
 	virtual void NativeOnInitialized() override;
 
