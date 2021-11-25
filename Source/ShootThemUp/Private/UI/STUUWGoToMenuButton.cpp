@@ -1,7 +1,7 @@
 // Shoot Them Up Game. All Rights Reserved.
 
 
-#include "UI/STUGoToMenuWidget.h"
+#include "UI/STUUWGoToMenuButton.h"
 
 #include "StUGameInstance.h"
 #include "Components/Button.h"
@@ -9,17 +9,17 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogSTUGoToMenuWidget, All, All);
 
-void USTUGoToMenuWidget::NativeOnInitialized()
+void USTUUWGoToMenuButton::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
 	if (MainButton)
 	{
-		MainButton->OnClicked.AddDynamic(this, &USTUGoToMenuWidget::OnGoToMenu);
+		MainButton->OnClicked.AddDynamic(this, &USTUUWGoToMenuButton::OnGoToMenu);
 	}
 }
 
-void USTUGoToMenuWidget::OnGoToMenu()
+void USTUUWGoToMenuButton::OnGoToMenu()
 {
 	if (!GetWorld()) return;
 

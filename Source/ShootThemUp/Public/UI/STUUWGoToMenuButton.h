@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "STUUWButton.h"
-#include "STUGoToMenuWidget.generated.h"
+#include "STUUWGoToMenuButton.generated.h"
 
 
 class UButton;
 UCLASS()
-class SHOOTTHEMUP_API USTUGoToMenuWidget : public USTUUWButton // todo rename to USTUUWGoToMenuButton
+class SHOOTTHEMUP_API USTUUWGoToMenuButton : public USTUUWButton
 {
 	GENERATED_BODY()
 
