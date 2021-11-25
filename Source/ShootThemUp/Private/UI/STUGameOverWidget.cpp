@@ -6,7 +6,7 @@
 #include "STUGameModeBase.h"
 #include "STUPlayerState.h"
 #include "STUPlayerStatRowWidget.h"
-#include "STUUWButton.h"
+#include "UWWidgetWrappers/STUUWButton.h"
 #include "Components/Button.h"
 #include "Components/VerticalBox.h"
 #include "Kismet/GameplayStatics.h"

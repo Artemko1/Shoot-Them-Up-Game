@@ -3,7 +3,7 @@
 
 #include "UI/STUPauseWidget.h"
 
-#include "STUUWButton.h"
+#include "UWWidgetWrappers/STUUWButton.h"
 #include "Components/Button.h"
 #include "GameFramework/GameModeBase.h"
 

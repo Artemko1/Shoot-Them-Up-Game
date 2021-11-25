@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "STUUWButton.h"
+#include "UWWidgetWrappers/STUUWButton.h"
 #include "STUUWGoToMenuButton.generated.h"
 
 

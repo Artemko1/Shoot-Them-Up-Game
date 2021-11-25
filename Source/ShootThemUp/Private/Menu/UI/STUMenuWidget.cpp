@@ -4,7 +4,7 @@
 #include "Menu/UI/STUMenuWidget.h"
 
 #include "STUGameInstance.h"
-#include "STUUWButton.h"
+#include "UWWidgetWrappers/STUUWButton.h"
 #include "Components/Button.h"
 #include "Components/HorizontalBox.h"
 #include "Kismet/GameplayStatics.h"
@@ -34,12 +34,6 @@ void USTUMenuWidget::OnStartGame()
 {
 	const auto STUGameInstance = GetSTUGameInstance();
 	if (!STUGameInstance) return;
-
-	// if (STUGameInstance->GetStartupLevelName().IsNone())
-	// {
-	// 	UE_LOG(LogSTUMenuWidget, Error, TEXT("Level name is NONE"));
-	// 	return;
-	// }
 
 	UGameplayStatics::OpenLevel(this, STUGameInstance->GetStartupLevel().LevelName);
 }
