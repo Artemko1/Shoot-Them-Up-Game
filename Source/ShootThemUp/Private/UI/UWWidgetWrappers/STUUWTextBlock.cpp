@@ -1,11 +1,11 @@
-// Shoot Them Up Game. All Rights Reserved.
+﻿// Shoot Them Up Game. All Rights Reserved.
 
 
-#include "UWWidgetWrappers/STUUWButton.h"
+#include "UWWidgetWrappers/STUUWTextBlock.h"
 
 #include "Components/TextBlock.h"
 
-void USTUUWButton::SynchronizeProperties()
+void USTUUWTextBlock::SynchronizeProperties()
 {
 	Super::SynchronizeProperties();
 
@@ -15,7 +15,7 @@ void USTUUWButton::SynchronizeProperties()
 	}
 }
 
-void USTUUWButton::SetText(const FText InText) const
+void USTUUWTextBlock::SetText(const FText InText) const
 {
 	if (MainText)
 	{

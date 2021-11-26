@@ -14,6 +14,8 @@ void USTULevelItemWidget::NativeOnInitialized()
 	if (LevelSelectButton)
 	{
 		LevelSelectButton->OnClicked.AddDynamic(this, &USTULevelItemWidget::OnLevelItemClicked);
+		LevelSelectButton->OnHovered.AddDynamic(this, &USTULevelItemWidget::USTULevelItemWidget::OnLevelItemHovered);
+		LevelSelectButton->OnUnhovered.AddDynamic(this, &USTULevelItemWidget::USTULevelItemWidget::OnLevelItemUnhovered);
 	}
 }
 
@@ -22,6 +24,7 @@ void USTULevelItemWidget::OnLevelItemClicked()
 {
 	OnLevelSelected.Broadcast(LevelData);
 }
+
 
 void USTULevelItemWidget::SetLevelData(const FLevelData Data)
 {
@@ -38,10 +41,29 @@ void USTULevelItemWidget::SetLevelData(const FLevelData Data)
 	}
 }
 
+// ReSharper disable once CppMemberFunctionMayBeConst
 void USTULevelItemWidget::SetSelected(const bool IsSelected)
+{
+	if (LevelImage)
+	{
+		LevelImage->SetColorAndOpacity(IsSelected ? FLinearColor::Red : FLinearColor::White);
+	}
+}
+
+// ReSharper disable once CppMemberFunctionMayBeConst
+void USTULevelItemWidget::OnLevelItemHovered()
 {
 	if (FrameImage)
 	{
-		FrameImage->SetVisibility(IsSelected ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+		FrameImage->SetVisibility(ESlateVisibility::Visible);
+	}
+}
+
+// ReSharper disable once CppMemberFunctionMayBeConst
+void USTULevelItemWidget::OnLevelItemUnhovered()
+{
+	if (FrameImage)
+	{
+		FrameImage->SetVisibility(ESlateVisibility::Hidden);
 	}
 }

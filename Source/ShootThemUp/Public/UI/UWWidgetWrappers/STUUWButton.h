@@ -19,21 +19,25 @@ class SHOOTTHEMUP_API USTUUWButton : public UUserWidget
 
 public:
 	UButton* GetButton() const { return MainButton; }
-	void SetText(FText InText) const;
+	UTextBlock* GetText() const { return MainText; }
+	UImage* GetImage() const { return MainImage; }
 
 protected:
-	// Not all blueprint subclasses of this may want to have a text label
-	UPROPERTY(meta=(BindWidgetOptional))
-	UTextBlock* MainLabel;
-
-	UPROPERTY(EditInstanceOnly, Category = "UI")
-	FText MainLabelText;
-
-	UPROPERTY(meta=(BindWidgetOptional))
-	UImage* MainIcon;
-
 	UPROPERTY(meta=(BindWidget))
 	UButton* MainButton;
 
+	// Not all blueprint subclasses of this may want to have a text label
+	UPROPERTY(meta=(BindWidgetOptional))
+	UTextBlock* MainText;
+
+	UPROPERTY(meta=(BindWidgetOptional))
+	UImage* MainImage;
+
 	virtual void SynchronizeProperties() override;
+
+private:
+	UPROPERTY(EditInstanceOnly, Category = "UI")
+	FText TextBlockText;
+
+	void SetText(FText InText) const;
 };
