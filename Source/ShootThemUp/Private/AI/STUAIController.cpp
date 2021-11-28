@@ -35,9 +35,14 @@ void ASTUAIController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	const auto AimActor = GetFocusOnActor();
-	if (!AimActor) return;
-
-	SetFocalPoint(AimActor->GetTargetLocation());
+	if (AimActor)
+	{
+		SetFocalPoint(AimActor->GetTargetLocation());
+	}
+	else
+	{
+		ClearFocus(EAIFocusPriority::Gameplay);
+	}
 }
 
 void ASTUAIController::UpdateControlRotation(float DeltaTime, bool bUpdatePawn)
