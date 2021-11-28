@@ -36,6 +36,11 @@ void USTUPlayerHUDWidget::OnHealthChanged(const float Health, const float Health
 	if (HealthDelta < 0)
 	{
 		OnTakeDamage();
+
+		if (!IsAnimationPlaying(DamageAnimation))
+		{
+			PlayAnimation(DamageAnimation);
+		}
 	}
 
 	UpdateHealthBar();

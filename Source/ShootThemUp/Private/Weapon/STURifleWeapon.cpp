@@ -8,7 +8,6 @@
 #include "NiagaraFunctionLibrary.h"
 #include "STUWeaponFXComponent.h"
 #include "TimerManager.h"
-#include "GameFramework/PlayerController.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All)
 
