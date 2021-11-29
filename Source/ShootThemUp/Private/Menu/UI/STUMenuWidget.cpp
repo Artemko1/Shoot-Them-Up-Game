@@ -29,13 +29,22 @@ void USTUMenuWidget::NativeOnInitialized()
 	InitLevelItems();
 }
 
-// ReSharper disable once CppMemberFunctionMayBeConst
-void USTUMenuWidget::OnStartGame()
+void USTUMenuWidget::OnAnimationFinished_Implementation(const UWidgetAnimation* Animation)
 {
+	Super::OnAnimationFinished_Implementation(Animation);
+
+	if (Animation != HideAnimation) { return; }
+
 	const auto STUGameInstance = GetSTUGameInstance();
 	if (!STUGameInstance) return;
 
 	UGameplayStatics::OpenLevel(this, STUGameInstance->GetStartupLevel().LevelName);
+}
+
+// ReSharper disable once CppMemberFunctionMayBeConst
+void USTUMenuWidget::OnStartGame()
+{
+	PlayAnimation(HideAnimation);
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst

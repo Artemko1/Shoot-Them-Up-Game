@@ -8,6 +8,7 @@
 #include "Blueprint/UserWidget.h"
 #include "STUMenuWidget.generated.h"
 
+class USTUUWTextBlock;
 class USTUUWButton;
 class USTUGameInstance;
 class USTULevelItemWidget;
@@ -32,7 +33,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> LevelItemWidgetClass;
 
+	UPROPERTY(meta = (BindWidgetAnim), Transient)
+	UWidgetAnimation* HideAnimation;
+
 	virtual void NativeOnInitialized() override;
+	virtual void OnAnimationFinished_Implementation(const UWidgetAnimation* Animation) override;
 
 private:
 	UPROPERTY()
