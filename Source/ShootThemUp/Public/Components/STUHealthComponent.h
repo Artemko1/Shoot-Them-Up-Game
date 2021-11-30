@@ -62,7 +62,7 @@ private:
 	FTimerHandle AutoHealTimerHandle;
 
 	UFUNCTION()
-	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType,
+	void ApplyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType,
 	                     class AController* InstigatedBy, AActor* DamageCauser);
 
 	void AutoHealTick();
@@ -70,4 +70,6 @@ private:
 	void PlayCameraShake() const;
 
 	void Killed(AController* KillerController) const;
+
+	void ReportDamageEvent(float Damage, AController* InstigatedBy) const;
 };

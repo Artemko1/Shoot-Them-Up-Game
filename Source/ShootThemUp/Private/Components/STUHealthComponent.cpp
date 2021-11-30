@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"
 #include "Engine/World.h"
+#include "Perception/AISense_Damage.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All);
 
@@ -25,7 +26,7 @@ void USTUHealthComponent::BeginPlay()
 	AActor* ComponentOwner = GetOwner();
 	if (ComponentOwner)
 	{
-		ComponentOwner->OnTakeAnyDamage.AddDynamic(this, &USTUHealthComponent::OnTakeAnyDamage);
+		ComponentOwner->OnTakeAnyDamage.AddDynamic(this, &USTUHealthComponent::ApplyDamage);
 	}
 }
 
@@ -41,8 +42,8 @@ bool USTUHealthComponent::TryAddHealth(const float Amount)
 	return true;
 }
 
-void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, const float Damage, const UDamageType* DamageType,
-                                          AController* InstigatedBy, AActor* DamageCauser)
+void USTUHealthComponent::ApplyDamage(AActor* DamagedActor, const float Damage, const UDamageType* DamageType,
+                                      AController* InstigatedBy, AActor* DamageCauser)
 {
 	if (Damage <= 0.0f || IsDead() || !GetWorld()) { return; }
 
@@ -62,6 +63,7 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, const float Dama
 	}
 
 	PlayCameraShake();
+	ReportDamageEvent(Damage, InstigatedBy);
 }
 
 void USTUHealthComponent::AutoHealTick()
@@ -115,4 +117,12 @@ void USTUHealthComponent::Killed(AController* KillerController) const
 	const auto VictimController = Player ? Player->Controller : nullptr;
 
 	GameMode->Killed(KillerController, VictimController);
+}
+
+void USTUHealthComponent::ReportDamageEvent(const float Damage, AController* InstigatedBy) const
+{
+	if (!InstigatedBy || !InstigatedBy->GetPawn() || !GetOwner()) return;
+
+	UAISense_Damage::ReportDamageEvent(GetWorld(), GetOwner(), InstigatedBy->GetPawn(), Damage, InstigatedBy->GetPawn()->GetActorLocation(),
+	                                   GetOwner()->GetActorLocation());
 }
