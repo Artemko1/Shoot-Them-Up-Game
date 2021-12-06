@@ -3,7 +3,10 @@
 
 #include "Weapon/STULauncherWeapon.h"
 
+#include "Components/AudioComponent.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 #include "Weapon/STUProjectile.h"
 
 ASTULauncherWeapon::ASTULauncherWeapon()
@@ -13,12 +16,18 @@ ASTULauncherWeapon::ASTULauncherWeapon()
 
 void ASTULauncherWeapon::StartFire()
 {
+	Super::StartFire();
+
+	if (IsAmmoEmpty())
+	{
+		return;
+	}
 	MakeShot();
 }
 
 void ASTULauncherWeapon::MakeShot()
 {
-	if (!GetWorld() || IsAmmoEmpty()) return;
+	if (!GetWorld()) return;
 
 	FVector TraceStart;
 	FVector TraceEnd;
@@ -30,7 +39,7 @@ void ASTULauncherWeapon::MakeShot()
 
 	const FVector EndPoint = HitResult.bBlockingHit ? HitResult.ImpactPoint : TraceEnd;
 	const FVector Direction = (EndPoint - GetMuzzleWorldLocation()).GetSafeNormal();
-	
+
 	const FTransform SpawnTransform(FRotator::ZeroRotator, GetMuzzleWorldLocation());
 	ASTUProjectile* Projectile = GetWorld()->SpawnActorDeferred<ASTUProjectile>(ProjectileClass, SpawnTransform);
 
@@ -40,8 +49,17 @@ void ASTULauncherWeapon::MakeShot()
 		Projectile->SetOwner(GetOwner());
 		Projectile->FinishSpawning(SpawnTransform);
 	}
-	
+
 	DecreaseAmmo();
 	// ReSharper disable once CppExpressionWithoutSideEffects
 	SpawnMuzzleFX();
+
+	if (FireAudioComponent)
+	{
+		FireAudioComponent->Play(0);
+	}
+	else
+	{
+		FireAudioComponent = UGameplayStatics::SpawnSoundAttached(FireSound, WeaponMesh, MuzzleSocketName);
+	}
 }

@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "STUBaseWeapon.generated.h"
 
+class USoundCue;
 class UNiagaraComponent;
 class UNiagaraSystem;
 class USkeletalMeshComponent;
@@ -52,6 +53,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	UNiagaraSystem* MuzzleFX;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+	USoundCue* FireSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+	USoundCue* NoAmmoSound;
+
+	UPROPERTY()
+	UAudioComponent* FireAudioComponent;
+
 	virtual void BeginPlay() override;
 
 	virtual void MakeShot();
@@ -59,7 +69,6 @@ protected:
 
 	bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
 	FVector GetMuzzleWorldLocation() const;
-
 
 	/**
 	 * @brief Кидает рейкаст и возвращает Hit первого объекта на пути

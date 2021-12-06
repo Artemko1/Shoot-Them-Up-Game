@@ -7,6 +7,8 @@
 #include "NiagaraFunctionLibrary.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All)
 
@@ -31,6 +33,10 @@ void ASTUBaseWeapon::BeginPlay()
 
 void ASTUBaseWeapon::StartFire()
 {
+	if (IsAmmoEmpty())
+	{
+		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), NoAmmoSound, GetActorLocation());
+	}
 }
 
 void ASTUBaseWeapon::StopFire()

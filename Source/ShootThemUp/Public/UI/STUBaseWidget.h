@@ -20,6 +20,6 @@ protected:
 	UPROPERTY(meta = (BindWidgetAnim), Transient)
 	UWidgetAnimation* ShowAnimation;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
 	USoundCue* OpenSound;
 };
