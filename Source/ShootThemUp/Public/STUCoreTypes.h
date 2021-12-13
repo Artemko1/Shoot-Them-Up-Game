@@ -4,6 +4,7 @@
 #include "STUCoreTypes.generated.h"
 // Weapon start
 
+class USoundCue;
 class UTexture2D;
 class UAnimMontage;
 class ASTUBaseWeapon;
@@ -94,6 +95,9 @@ struct FImpactData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	FDecalData DecalData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SFX")
+	USoundCue* SoundCue;
 };
 
 // VFX end
