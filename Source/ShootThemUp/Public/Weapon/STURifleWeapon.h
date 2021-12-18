@@ -16,7 +16,7 @@ class SHOOTTHEMUP_API ASTURifleWeapon : public ASTUBaseWeapon
 public:
 	ASTURifleWeapon();
 
-	virtual void StartFire() override;
+	virtual bool StartFire() override;
 	virtual void StopFire() override;
 
 protected:

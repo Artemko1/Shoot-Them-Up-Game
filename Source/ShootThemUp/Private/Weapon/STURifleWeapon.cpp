@@ -27,20 +27,17 @@ void ASTURifleWeapon::BeginPlay()
 	check(WeaponFXComponent);
 }
 
-void ASTURifleWeapon::StartFire()
+bool ASTURifleWeapon::StartFire()
 {
-	Super::StartFire();
-
-	if (IsAmmoEmpty())
+	if (Super::StartFire() && GetWorld())
 	{
-		return;
+		InitFX();
+		GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ASTURifleWeapon::MakeShot, TimeBetweenShots, true);
+		MakeShot();
+		return true;
 	}
 
-	if (!GetWorld()) return;
-
-	InitFX();
-	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ASTURifleWeapon::MakeShot, TimeBetweenShots, true);
-	MakeShot();
+	return false;
 }
 
 void ASTURifleWeapon::StopFire()

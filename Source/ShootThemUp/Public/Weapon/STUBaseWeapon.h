@@ -22,7 +22,11 @@ public:
 
 	FOnClipEmptySignature OnClipEmpty;
 
-	virtual void StartFire();
+	/**
+	 * @brief 
+	 * @return false if failed to start fire, true otherwise
+	 */
+	virtual bool StartFire();
 	virtual void StopFire();
 
 	void ChangeClip();

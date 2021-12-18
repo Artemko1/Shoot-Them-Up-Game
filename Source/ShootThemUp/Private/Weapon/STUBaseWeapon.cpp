@@ -31,12 +31,15 @@ void ASTUBaseWeapon::BeginPlay()
 	CurrentAmmo = DefaultAmmo;
 }
 
-void ASTUBaseWeapon::StartFire()
+bool ASTUBaseWeapon::StartFire()
 {
 	if (IsAmmoEmpty())
 	{
 		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), NoAmmoSound, GetActorLocation());
+		return false;
 	}
+
+	return true;
 }
 
 void ASTUBaseWeapon::StopFire()

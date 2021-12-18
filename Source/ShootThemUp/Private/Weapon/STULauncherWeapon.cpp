@@ -14,15 +14,15 @@ ASTULauncherWeapon::ASTULauncherWeapon()
 	DefaultAmmo = {1, 5, false};
 }
 
-void ASTULauncherWeapon::StartFire()
+bool ASTULauncherWeapon::StartFire()
 {
-	Super::StartFire();
-
-	if (IsAmmoEmpty())
+	if (Super::StartFire())
 	{
-		return;
+		MakeShot();
+		return true;
 	}
-	MakeShot();
+
+	return false;
 }
 
 void ASTULauncherWeapon::MakeShot()

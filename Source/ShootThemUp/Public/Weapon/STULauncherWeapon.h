@@ -15,10 +15,10 @@ class SHOOTTHEMUP_API ASTULauncherWeapon : public ASTUBaseWeapon
 
 public:
 	ASTULauncherWeapon();
-	virtual void StartFire() override;
+	virtual bool StartFire() override;
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<ASTUProjectile> ProjectileClass;
-	
+
 	virtual void MakeShot() override;
 };
