@@ -5,6 +5,7 @@
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/AudioComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
@@ -18,6 +19,11 @@ ASTUBaseWeapon::ASTUBaseWeapon()
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("WeaponMesh");
 	SetRootComponent(WeaponMesh);
+
+	FireAudioComponent = CreateDefaultSubobject<UAudioComponent>("FireAudioComponent");
+	FireAudioComponent->SetupAttachment(WeaponMesh, MuzzleSocketName);
+	FireAudioComponent->bAutoDestroy = false;
+	FireAudioComponent->SetAutoActivate(false);
 }
 
 void ASTUBaseWeapon::BeginPlay()
@@ -29,6 +35,8 @@ void ASTUBaseWeapon::BeginPlay()
 	checkf(DefaultAmmo.SpareBullets > 0, TEXT("SpareBullets count must be more than zero"))
 
 	CurrentAmmo = DefaultAmmo;
+
+	check(FireAudioComponent);
 }
 
 bool ASTUBaseWeapon::StartFire()

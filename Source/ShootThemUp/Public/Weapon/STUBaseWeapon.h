@@ -58,12 +58,9 @@ protected:
 	UNiagaraSystem* MuzzleFX;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
-	USoundCue* FireSound;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
 	USoundCue* NoAmmoSound;
 
-	UPROPERTY()
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	UAudioComponent* FireAudioComponent;
 
 	virtual void BeginPlay() override;

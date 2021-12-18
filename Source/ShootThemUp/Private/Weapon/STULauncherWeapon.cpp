@@ -6,7 +6,6 @@
 #include "Components/AudioComponent.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
-#include "Sound/SoundCue.h"
 #include "Weapon/STUProjectile.h"
 
 ASTULauncherWeapon::ASTULauncherWeapon()
@@ -57,9 +56,5 @@ void ASTULauncherWeapon::MakeShot()
 	if (FireAudioComponent)
 	{
 		FireAudioComponent->Play(0);
-	}
-	else
-	{
-		FireAudioComponent = UGameplayStatics::SpawnSoundAttached(FireSound, WeaponMesh, MuzzleSocketName);
 	}
 }

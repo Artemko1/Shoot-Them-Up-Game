@@ -10,7 +10,6 @@
 #include "TimerManager.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Sound/SoundCue.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All)
 
@@ -112,24 +111,21 @@ void ASTURifleWeapon::InitFX()
 		MuzzleFXComponent = SpawnMuzzleFX();
 	}
 
-	if (!FireAudioComponent)
-	{
-		FireAudioComponent = UGameplayStatics::SpawnSoundAttached(FireSound, WeaponMesh, MuzzleSocketName);
-	}
-
 	SetFXActive(true);
 }
 
 void ASTURifleWeapon::SetFXActive(const bool IsActive) const
 {
-	if (!MuzzleFXComponent) return;
+	if (MuzzleFXComponent)
+	{
+		MuzzleFXComponent->SetPaused(!IsActive);
+		MuzzleFXComponent->SetVisibility(IsActive);
+	}
 
-	MuzzleFXComponent->SetPaused(!IsActive);
-	MuzzleFXComponent->SetVisibility(IsActive);
-
-	if (!FireAudioComponent) return;
-
-	FireAudioComponent->SetPaused(!IsActive);
+	if (FireAudioComponent)
+	{
+		IsActive ? FireAudioComponent->Play() : FireAudioComponent->Stop();
+	}
 }
 
 void ASTURifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd)
