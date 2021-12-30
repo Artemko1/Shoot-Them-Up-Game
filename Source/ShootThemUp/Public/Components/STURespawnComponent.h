@@ -15,14 +15,13 @@ class SHOOTTHEMUP_API USTURespawnComponent : public UActorComponent
 public:
 	USTURespawnComponent();
 
-	void Respawn(int32 RespawnTime);
-	int32 GetRespawnCountDown() const { return RespawnCountDown; }
+	void StartRespawn(int32 RespawnTime);
+	float GetRespawnCountDown() const;
 	bool IsRespawnInProgress() const;
-	
+
 private:
 	FTimerHandle RespawnTimerHandle;
-	int32 RespawnCountDown = 0;
 
-	void RespawnTimerUpdate();
+	void RespawnTimerEnd();
 	AController* GetController() const;
 };

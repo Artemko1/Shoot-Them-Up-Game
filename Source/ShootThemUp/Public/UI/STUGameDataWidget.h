@@ -15,7 +15,7 @@ class SHOOTTHEMUP_API USTUGameDataWidget : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
-	int32 GetRoundSecondsRemaining() const;
+	float GetRoundTimeRemaining() const;
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	int32 GetCurrentRoundNum() const;

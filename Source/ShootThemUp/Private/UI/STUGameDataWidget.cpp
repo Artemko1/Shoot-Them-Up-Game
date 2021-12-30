@@ -4,10 +4,10 @@
 #include "UI/STUGameDataWidget.h"
 #include "STUGameModeBase.h"
 
-int32 USTUGameDataWidget::GetRoundSecondsRemaining() const
+float USTUGameDataWidget::GetRoundTimeRemaining() const
 {
 	const auto GameMode = GetSTUGameMode();
-	return GameMode ? GameMode->GetRoundSecondsRemaining() : 0;
+	return GameMode ? GameMode->GetRoundTimeRemaining() : 0;
 }
 
 int32 USTUGameDataWidget::GetCurrentRoundNum() const
