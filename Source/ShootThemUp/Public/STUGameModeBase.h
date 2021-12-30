@@ -25,7 +25,7 @@ public:
 
 	int32 GetCurrentRoundNum() const { return CurrentRound; }
 	int32 GetTotalRoundsNum() const { return GameData.RoundsNum; }
-	int32 GetRoundSecondsRemaining() const { return RoundCountDown; }
+	float GetRoundTimeRemaining() const { return GetWorld() ? GetWorld()->GetTimerManager().GetTimerRemaining(GameRoundTimerHandle) : 0; }
 	void RespawnRequest(AController* Controller);
 
 	virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate) override;
@@ -45,12 +45,11 @@ private:
 	ESTUMatchState MatchState = ESTUMatchState::WaitingToStart;
 
 	int32 CurrentRound = 1;
-	int32 RoundCountDown = 0;
 	FTimerHandle GameRoundTimerHandle;
 
 	void SpawnBots();
 	void StartRound();
-	void GameTimerUpdate();
+	void OnRoundEnd();
 
 	void ResetPlayers();
 	void ResetOnePlayer(AController* Controller);

@@ -58,29 +58,20 @@ void ASTUGameModeBase::SpawnBots()
 
 void ASTUGameModeBase::StartRound()
 {
-	RoundCountDown = GameData.RoundTime;
-	GetWorldTimerManager().SetTimer(GameRoundTimerHandle, this, &ASTUGameModeBase::GameTimerUpdate, 1.f, true);
+	GetWorldTimerManager().SetTimer(GameRoundTimerHandle, this, &ASTUGameModeBase::OnRoundEnd, GameData.RoundTime);
 }
 
-void ASTUGameModeBase::GameTimerUpdate()
+void ASTUGameModeBase::OnRoundEnd()
 {
-	UE_LOG(LogSTUGameModeBase, Display, TEXT("Time: %i, Round: %i/%i"), RoundCountDown, CurrentRound,
-	       GameData.RoundsNum);
-
-	if (--RoundCountDown == 0)
+	if (CurrentRound + 1 <= GameData.RoundsNum)
 	{
-		GetWorldTimerManager().ClearTimer(GameRoundTimerHandle);
-
-		if (CurrentRound + 1 <= GameData.RoundsNum)
-		{
-			++CurrentRound;
-			ResetPlayers();
-			StartRound();
-		}
-		else
-		{
-			GameOver();
-		}
+		++CurrentRound;
+		ResetPlayers();
+		StartRound();
+	}
+	else
+	{
+		GameOver();
 	}
 }
 
@@ -219,13 +210,16 @@ void ASTUGameModeBase::LogPlayerInfo() const
 
 void ASTUGameModeBase::StartRespawn(const AController* Controller) const
 {
-	const auto RespawnAvailable = RoundCountDown > GameData.MinRoundTimeForRespawn + GameData.RespawnTime;
-	if (!RespawnAvailable) return;
+	if (!GetWorld()) return;
+
+	const auto TimeRemaining = GetWorld()->GetTimerManager().GetTimerRemaining(GameRoundTimerHandle);
+	const auto IsRespawnAvailable = TimeRemaining > GameData.MinRoundTimeForRespawn + GameData.RespawnTime;
+	if (!IsRespawnAvailable) return;
 
 	const auto RespawnComponent = Controller->FindComponentByClass<USTURespawnComponent>();
 	if (!RespawnComponent) return;
 
-	RespawnComponent->Respawn(GameData.RespawnTime);
+	RespawnComponent->StartRespawn(GameData.RespawnTime);
 }
 
 void ASTUGameModeBase::GameOver()
