@@ -9,13 +9,18 @@ USTURespawnComponent::USTURespawnComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void USTURespawnComponent::Respawn(const int32 RespawnTime)
+void USTURespawnComponent::StartRespawn(const int32 RespawnTime)
 {
 	if (!GetWorld()) return;
 
-	RespawnCountDown = RespawnTime;
-	GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &USTURespawnComponent::RespawnTimerUpdate, 1.f,
-	                                       true);
+	GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &USTURespawnComponent::RespawnTimerEnd, RespawnTime);
+}
+
+float USTURespawnComponent::GetRespawnCountDown() const
+{
+	if (!GetWorld()) return 0;
+
+	return GetWorld()->GetTimerManager().GetTimerRemaining(RespawnTimerHandle);
 }
 
 bool USTURespawnComponent::IsRespawnInProgress() const
@@ -23,19 +28,15 @@ bool USTURespawnComponent::IsRespawnInProgress() const
 	return GetWorld() && GetWorld()->GetTimerManager().IsTimerActive(RespawnTimerHandle);
 }
 
-void USTURespawnComponent::RespawnTimerUpdate()
+// ReSharper disable once CppMemberFunctionMayBeConst
+void USTURespawnComponent::RespawnTimerEnd()
 {
-	if (--RespawnCountDown == 0)
-	{
-		if (!GetWorld()) return;
+	if (!GetWorld()) return;
 
-		GetWorld()->GetTimerManager().ClearTimer(RespawnTimerHandle);
+	const auto GameMode = GetWorld()->GetAuthGameMode<ASTUGameModeBase>();
+	if (!GameMode) return;
 
-		const auto GameMode = GetWorld()->GetAuthGameMode<ASTUGameModeBase>();
-		if (!GameMode) return;
-
-		GameMode->RespawnRequest(GetController());
-	}
+	GameMode->RespawnRequest(GetController());
 }
 
 AController* USTURespawnComponent::GetController() const
