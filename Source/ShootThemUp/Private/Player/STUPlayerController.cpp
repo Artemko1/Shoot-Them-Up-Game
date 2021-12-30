@@ -4,6 +4,7 @@
 #include "Player/STUPlayerController.h"
 
 #include "STUGameHUD.h"
+#include "STUGameInstance.h"
 #include "STUGameModeBase.h"
 #include "STURespawnComponent.h"
 
@@ -32,6 +33,7 @@ void ASTUPlayerController::SetupInputComponent()
 	if (!InputComponent) return;
 
 	InputComponent->BindAction("PauseGame", IE_Pressed, this, &ASTUPlayerController::OnPauseGame);
+	InputComponent->BindAction("Mute", IE_Pressed, this, &ASTUPlayerController::OnMuteSound);
 }
 
 void ASTUPlayerController::OnPauseGame()
@@ -51,4 +53,15 @@ void ASTUPlayerController::OnMatchStateChanged(const ESTUMatchState State)
 		SetInputMode(FInputModeUIOnly());
 		SetShowMouseCursor(true);
 	}
+}
+
+// ReSharper disable once CppMemberFunctionMayBeConst
+void ASTUPlayerController::OnMuteSound()
+{
+	if (!GetWorld()) return;
+
+	const auto STUGameInstance = GetWorld()->GetGameInstance<USTUGameInstance>();
+	if (!STUGameInstance) return;
+
+	STUGameInstance->ToggleVolume();
 }

@@ -20,12 +20,17 @@ public:
 
 	FName GetMenuLevelName() const { return MenuLevelName; }
 
+	void ToggleVolume() const;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game", meta = (Tooltip = "Level names must be unique!"))
 	TArray<FLevelData> LevelsData;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
 	FName MenuLevelName = NAME_None;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	USoundClass* MasterSoundClass;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Game")
