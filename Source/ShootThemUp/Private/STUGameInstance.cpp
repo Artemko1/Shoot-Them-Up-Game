@@ -2,9 +2,18 @@
 
 #include "STUGameInstance.h"
 
-#include "Sound/STUSoundFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
-void USTUGameInstance::ToggleVolume() const
+void USTUGameInstance::ToggleVolume()
 {
-	USTUSoundFunctionLibrary::ToggleSoundClassVolume(MasterSoundClass);
+	if (!IsSoundMuted)
+	{
+		UGameplayStatics::PushSoundMixModifier(GetWorld(), MuteSoundMix);
+		IsSoundMuted = true;
+	}
+	else
+	{
+		UGameplayStatics::PopSoundMixModifier(GetWorld(), MuteSoundMix);
+		IsSoundMuted = false;
+	}
 }

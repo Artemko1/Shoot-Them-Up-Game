@@ -20,7 +20,7 @@ public:
 
 	FName GetMenuLevelName() const { return MenuLevelName; }
 
-	void ToggleVolume() const;
+	void ToggleVolume();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game", meta = (Tooltip = "Level names must be unique!"))
@@ -30,9 +30,12 @@ protected:
 	FName MenuLevelName = NAME_None;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-	USoundClass* MasterSoundClass;
+	USoundMix* MuteSoundMix;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Game")
 	FLevelData StartupLevel;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Sound")
+	bool IsSoundMuted = false;
 };
