@@ -41,6 +41,11 @@ void ASTUBaseWeapon::BeginPlay()
 
 bool ASTUBaseWeapon::StartFire()
 {
+	if (IsFiring())
+	{
+		return false;
+	}
+
 	if (IsAmmoEmpty())
 	{
 		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), NoAmmoSound, GetActorLocation());

@@ -28,6 +28,7 @@ public:
 	 */
 	virtual bool StartFire();
 	virtual void StopFire();
+	virtual bool IsFiring() const { return false; }
 
 	void ChangeClip();
 	bool CanReload() const;
@@ -60,8 +61,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
 	USoundCue* NoAmmoSound;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	UAudioComponent* FireAudioComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound", meta = (ClampMin = "0.0", ClampMax = "1.0"))
+	float FireAudioFadeInTime = 0.03f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound", meta = (ClampMin = "0.0", ClampMax = "1.0"))
+	float FireAudioFadeOutTime = 0.1f;
 
 	virtual void BeginPlay() override;
 

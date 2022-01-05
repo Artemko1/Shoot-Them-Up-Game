@@ -10,6 +10,7 @@
 #include "TimerManager.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All)
 
@@ -41,8 +42,21 @@ bool ASTURifleWeapon::StartFire()
 
 void ASTURifleWeapon::StopFire()
 {
+	if (!IsFiring()) return;
+
 	GetWorldTimerManager().ClearTimer(ShotTimerHandle);
 	SetFXActive(false);
+	// UGameplayStatics::PlaySoundAtLocation(GetWorld(), FireEndSound, GetActorLocation(), GetActorRotation());
+	// USceneComponent* SoundLocation = GetOwner() ? GetOwner()->GetRootComponent() : GetRootComponent();
+	if (GetOwner())
+	{
+		UGameplayStatics::SpawnSoundAttached(FireEndSound, GetOwner()->GetRootComponent());
+	}
+}
+
+bool ASTURifleWeapon::IsFiring() const
+{
+	return GetWorldTimerManager().IsTimerActive(ShotTimerHandle);
 }
 
 void ASTURifleWeapon::MakeShot()
@@ -124,7 +138,7 @@ void ASTURifleWeapon::SetFXActive(const bool IsActive) const
 
 	if (FireAudioComponent)
 	{
-		IsActive ? FireAudioComponent->Play() : FireAudioComponent->Stop();
+		IsActive ? FireAudioComponent->FadeIn(FireAudioFadeInTime, 1.f) : FireAudioComponent->FadeOut(FireAudioFadeOutTime, 0.f);
 	}
 }
 
