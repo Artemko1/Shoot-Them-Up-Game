@@ -117,6 +117,13 @@ void USTUWeaponComponent::StopFire()
 	CurrentWeapon->StopFire();
 }
 
+bool USTUWeaponComponent::IsFiring() const
+{
+	if (!CurrentWeapon) return false;
+
+	return CurrentWeapon->IsFiring();
+}
+
 void USTUWeaponComponent::NextWeapon()
 {
 	if (!CanEquip()) return;
@@ -230,7 +237,7 @@ bool USTUWeaponComponent::NeedAmmo(const TSubclassOf<ASTUBaseWeapon> WeaponType)
 {
 	ASTUBaseWeapon* Weapon = GetWeaponOfType(WeaponType);
 	if (!Weapon) return false;
-	
+
 	return !Weapon->IsAmmoFull();
 }
 

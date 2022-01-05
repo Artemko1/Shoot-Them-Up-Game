@@ -18,6 +18,7 @@ public:
 
 	virtual bool StartFire() override;
 	virtual void StopFire() override;
+	virtual bool IsFiring() const override;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
@@ -37,6 +38,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "VFX")
 	USTUWeaponFXComponent* WeaponFXComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	USoundCue* FireEndSound;
 
 	virtual void BeginPlay() override;
 	virtual void MakeShot() override;
