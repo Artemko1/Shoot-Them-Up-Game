@@ -27,5 +27,18 @@ void USTUFireService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 	const auto WeaponComponent = Pawn->FindComponentByClass<USTUWeaponComponent>();
 	if (!WeaponComponent) return;
 
-	HasAim ? WeaponComponent->StartFire() : WeaponComponent->StopFire();
+	if (HasAim)
+	{
+		// if (!WeaponComponent->IsFiring())
+		// {
+		WeaponComponent->StartFire();
+		// }
+	}
+	else
+	{
+		// if (WeaponComponent->IsFiring())
+		// {
+		WeaponComponent->StopFire();
+		// }
+	}
 }
